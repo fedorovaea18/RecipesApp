@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <dimen name="mainPadding">16dp</dimen>
+    <dimen name="halfPadding">8dp</dimen>
+</resources>

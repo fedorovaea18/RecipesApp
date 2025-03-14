@@ -5,37 +5,45 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/backgroundColor"
-    android:padding="@dimen/mainPadding"
+    android:background="@color/background_color"
     tools:context=".MainActivity">
 
     <LinearLayout
-        android:layout_width="328dp"
-        android:layout_height="36dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/main_padding"
+        android:layout_marginBottom="@dimen/half_padding"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <Button
+            android:id="@+id/btnCategories"
+            style="@style/StyleNavButton"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:backgroundTint="#525DC0"
-            android:layout_marginEnd="4dp"
-            android:text="Категории"
-            style="@style/Widget.Material3.Button.StyleNavButton"/>
+            android:layout_marginEnd="@dimen/button_spacing"
+            android:layout_weight="1"
+            android:backgroundTint="@color/button_categories_color"
+            android:paddingTop="@dimen/button_padding_top"
+            android:paddingBottom="@dimen/button_padding_bottom"
+            android:text="@string/button_categories" />
 
         <Button
+            android:id="@+id/btnFavourites"
+            style="@style/StyleNavButton"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:backgroundTint="#E13E3E"
-            android:paddingEnd="14dp"
-            android:text="Избранное"
+            android:layout_marginStart="@dimen/button_spacing"
+            android:layout_weight="1"
+            android:backgroundTint="@color/button_favourites_color"
+            android:paddingTop="@dimen/button_padding_top"
+            android:paddingBottom="@dimen/button_padding_bottom"
+            android:text="@string/button_favourites"
             app:icon="@drawable/ic_heart"
-            app:iconGravity="end"
-            style="@style/Widget.Material3.Button.StyleNavButton"/>
+            app:iconGravity="textEnd" />
 
     </LinearLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

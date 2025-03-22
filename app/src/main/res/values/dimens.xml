@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <dimen name="main_padding">16dp</dimen>
-    <dimen name="half_padding">8dp</dimen>
-    <dimen name="text_size_button">14sp</dimen>
-    <dimen name="button_spacing">2dp</dimen>
-    <dimen name="button_padding_top">10dp</dimen>
-    <dimen name="button_padding_bottom">10dp</dimen>
-    <dimen name="corner_radius">8dp</dimen>
+                    <!--Space-->
+    <dimen name="main_space_16">16dp</dimen>
+    <dimen name="main_space_half_8">8dp</dimen>
+    <dimen name="medium_space_10">10dp</dimen>
+    <dimen name="small_space_2">2dp</dimen>
+
+                    <!--Text size-->
+    <dimen name="text_size_14">14sp</dimen>
+
+                    <!--Corner radius-->
+    <dimen name="corner_radius_8">8dp</dimen>
 
 </resources>

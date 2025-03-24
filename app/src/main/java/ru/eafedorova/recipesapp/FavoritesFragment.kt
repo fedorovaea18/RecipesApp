@@ -10,7 +10,9 @@ import ru.eafedorova.recipesapp.databinding.FragmentFavoritesBinding
 class FavoritesFragment : Fragment() {
 
     private var _binding: FragmentFavoritesBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding
+            ?: throw IllegalStateException("binding for FavoritesFragment must not be null")
 
     override fun onCreateView(
         inflater: LayoutInflater,

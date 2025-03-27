@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="text_button_color">#FFFFFF</color>
+    <color name="white_color">#FFFFFF</color>
     <color name="background_color">#F4FAFF</color>
     <color name="button_categories_color">#525DC0</color>
     <color name="button_favourites_color">#E13E3E</color>
+    <color name="text_title_color">#5F3678</color>
+    <color name="text_description_color">#666666</color>
 
 </resources>

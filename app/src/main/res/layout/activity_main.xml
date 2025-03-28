@@ -38,7 +38,7 @@
             android:backgroundTint="@color/button_categories_color"
             android:paddingTop="@dimen/medium_space_10"
             android:paddingBottom="@dimen/medium_space_10"
-            android:text="@string/button_categories" />
+            android:text="@string/text_categories" />
 
         <Button
             android:id="@+id/btnFavourites"
@@ -50,7 +50,7 @@
             android:backgroundTint="@color/button_favourites_color"
             android:paddingTop="@dimen/medium_space_10"
             android:paddingBottom="@dimen/medium_space_10"
-            android:text="@string/button_favourites"
+            android:text="@string/text_favourites"
             app:icon="@drawable/ic_heart"
             app:iconGravity="textEnd" />
 

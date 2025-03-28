@@ -8,9 +8,15 @@
     <dimen name="small_space_2">2dp</dimen>
 
                     <!--Text size-->
+    <dimen name="text_size_12">12sp</dimen>
     <dimen name="text_size_14">14sp</dimen>
+    <dimen name="text_size_20">20sp</dimen>
 
-                    <!--Corner radius-->
+                <!--Corner radius-->
     <dimen name="corner_radius_8">8dp</dimen>
+
+                <!--Other size-->
+    <dimen name="_130">130dp</dimen>
+    <dimen name="_224">224dp</dimen>
 
 </resources>

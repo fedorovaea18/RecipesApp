@@ -1,10 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="StyleTitle14" parent="TextAppearance.AppCompat">
         <item name="android:textSize">@dimen/text_size_14</item>
         <item name="android:fontFamily">@font/montserrat_alternates_semi_bold</item>
         <item name="android:textAllCaps">true</item>
-        <item name="android:textColor">@color/text_button_color</item>
+        <item name="android:textColor">@color/white_color</item>
+    </style>
+
+    <style name="StyleTitle20" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/text_size_20</item>
+        <item name="android:fontFamily">@font/montserrat_alternates_semi_bold</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/text_title_color</item>
+    </style>
+
+    <style name="StyleTitle12" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/text_size_12</item>
+        <item name="android:fontFamily">@font/montserrat_alternates_medium</item>
+        <item name="android:textColor">@color/text_description_color</item>
+    </style>
+
+    <style name="StyleTitleCategories14" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="android:fontFamily">@font/montserrat_alternates_semi_bold</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/text_title_color</item>
     </style>
 
     <style name="StyleNavButton" parent="Widget.Material3.Button">

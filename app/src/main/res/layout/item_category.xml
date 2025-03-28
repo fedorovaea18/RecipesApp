@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/main_space_half_8"
+    android:layout_marginVertical="@dimen/main_space_half_8"
+    android:background="@color/white_color"
+    android:clickable="true"
+    card_view:cardCornerRadius="@dimen/corner_radius_8">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/main_space_half_8">
+
+        <ImageView
+            android:id="@+id/ivImageCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_130"
+            android:contentDescription="@string/image_description_burger"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/tvTitleCategory"
+            style="@style/StyleTitleCategories14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Название категории" />
+
+        <TextView
+            android:id="@+id/tvDescriptionCategory"
+            style="@style/StyleTitle12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/main_space_half_8"
+            android:layout_marginBottom="@dimen/main_space_half_8"
+            android:text="Описание категории" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

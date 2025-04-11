@@ -12,10 +12,24 @@ import java.io.InputStream
 class CategoriesListAdapter(private val dataSet: List<Category>) :
     RecyclerView.Adapter<CategoriesListAdapter.ViewHolder>() {
 
-    class ViewHolder(val binding: ItemCategoryBinding) : RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder(private val binding: ItemCategoryBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(category: Category) {
             binding.tvTitleCategory.text = category.title
             binding.tvDescriptionCategory.text = category.description
+            binding.ivImageCategory.contentDescription =
+                binding.root.context.getString(
+                    R.string.image_description_category,
+                    category.title
+                )
+
+            val drawable = try {
+                val inputStream: InputStream? = binding.root.context?.assets?.open(category.imageUrl)
+                Drawable.createFromStream(inputStream, null)
+            } catch (e: IOException) {
+                Log.e("CategoriesListAdapter", "Ошибка при загрузке изображения: ${e.message}", e)
+                null
+            }
+            binding.ivImageCategory.setImageDrawable(drawable)
         }
 
     }
@@ -27,19 +41,7 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        viewHolder.binding.tvTitleCategory.text = dataSet[position].title
-        viewHolder.binding.tvDescriptionCategory.text = dataSet[position].description
-        val drawable =
-            try {
-                val inputStream: InputStream? =
-                    viewHolder.itemView.context?.assets?.open(dataSet[position].imageUrl)
-                Drawable.createFromStream(inputStream, null)
-            } catch (e: IOException) {
-                Log.e("CategoriesListAdapter", "Ошибка при загрузке изображения: ${e.message}", e)
-                null
-            }
-        viewHolder.binding.ivImageCategory.setImageDrawable(drawable)
-
+        viewHolder.bind(dataSet[position])
     }
 
     override fun getItemCount() = dataSet.size

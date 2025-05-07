@@ -2,7 +2,6 @@
     <string name="app_name">RecipesApp</string>
     <string name="text_categories">Категории</string>
     <string name="text_favourites">Избранное</string>
-    <string name="image_description_categories">Изображение различных категорий рецептов</string>
-    <string name="image_description_burger">Изображение бургера</string>
+    <string name="image_description_category">Изображение категории %1$s</string>
 
 </resources>

@@ -29,4 +29,15 @@ class CategoriesListFragment : Fragment() {
         _binding = null
     }
 
+    private fun initRecycler() {
+        val categoriesAdapter = CategoriesListAdapter(STUB.getCategories())
+        binding.rvCategories.adapter = categoriesAdapter
+
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initRecycler()
+    }
+
 }

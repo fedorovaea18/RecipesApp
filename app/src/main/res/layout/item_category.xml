@@ -7,19 +7,20 @@
     android:layout_marginVertical="@dimen/main_space_half_8"
     android:background="@color/white_color"
     android:clickable="true"
+    android:focusable="true"
+    android:foreground="?selectableItemBackground"
     card_view:cardCornerRadius="@dimen/corner_radius_8">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="@dimen/main_space_half_8">
+        android:orientation="vertical">
 
         <ImageView
             android:id="@+id/ivImageCategory"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/_130"
-            android:contentDescription="@string/image_description_burger"
+            android:contentDescription="@string/image_description_category"
             android:scaleType="centerCrop" />
 
         <TextView
@@ -27,6 +28,7 @@
             style="@style/StyleTitleCategories14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="@dimen/main_space_half_8"
             android:text="Название категории" />
 
         <TextView
@@ -34,8 +36,9 @@
             style="@style/StyleTitle12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/main_space_half_8"
-            android:layout_marginBottom="@dimen/main_space_half_8"
+            android:layout_marginStart="@dimen/main_space_half_8"
+            android:layout_marginEnd="@dimen/main_space_half_8"
+            android:layout_marginBottom="@dimen/medium_space_10"
             android:text="Описание категории" />
 
     </LinearLayout>

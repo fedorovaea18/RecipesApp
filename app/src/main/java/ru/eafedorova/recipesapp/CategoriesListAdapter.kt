@@ -12,7 +12,17 @@ import java.io.InputStream
 class CategoriesListAdapter(private val dataSet: List<Category>) :
     RecyclerView.Adapter<CategoriesListAdapter.ViewHolder>() {
 
-    class ViewHolder(private val binding: ItemCategoryBinding) : RecyclerView.ViewHolder(binding.root) {
+    interface OnItemClickListener {
+        fun onItemClick()
+    }
+
+    private var itemClickListener: OnItemClickListener? = null
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        itemClickListener = listener
+    }
+
+    class ViewHolder(val binding: ItemCategoryBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(category: Category) {
             binding.tvTitleCategory.text = category.title
             binding.tvDescriptionCategory.text = category.description
@@ -23,7 +33,8 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
                 )
 
             val drawable = try {
-                val inputStream: InputStream? = binding.root.context?.assets?.open(category.imageUrl)
+                val inputStream: InputStream? =
+                    binding.root.context?.assets?.open(category.imageUrl)
                 Drawable.createFromStream(inputStream, null)
             } catch (e: IOException) {
                 Log.e("CategoriesListAdapter", "Ошибка при загрузке изображения: ${e.message}", e)
@@ -42,6 +53,10 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         viewHolder.bind(dataSet[position])
+
+        viewHolder.binding.root.setOnClickListener {
+            itemClickListener?.onItemClick()
+        }
     }
 
     override fun getItemCount() = dataSet.size

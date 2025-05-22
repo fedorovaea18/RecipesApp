@@ -13,7 +13,7 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
     RecyclerView.Adapter<CategoriesListAdapter.ViewHolder>() {
 
     interface OnItemClickListener {
-        fun onItemClick()
+        fun onItemClick(categoryId: Int)
     }
 
     private var itemClickListener: OnItemClickListener? = null
@@ -26,11 +26,9 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
         fun bind(category: Category) {
             binding.tvTitleCategory.text = category.title
             binding.tvDescriptionCategory.text = category.description
-            binding.ivImageCategory.contentDescription =
-                binding.root.context.getString(
-                    R.string.image_description_category,
-                    category.title
-                )
+            binding.ivImageCategory.contentDescription = binding.root.context.getString(
+                R.string.image_description_category, category.title
+            )
 
             val drawable = try {
                 val inputStream: InputStream? =
@@ -55,7 +53,7 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
         viewHolder.bind(dataSet[position])
 
         viewHolder.binding.root.setOnClickListener {
-            itemClickListener?.onItemClick()
+            itemClickListener?.onItemClick(dataSet[position].id)
         }
     }
 

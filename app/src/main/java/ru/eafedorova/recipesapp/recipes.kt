@@ -14,4 +14,8 @@ object STUB {
         return categories
     }
 
+    fun getCategoryById(categoryId: Int): Category? {
+        return categories.find { it.id == categoryId }
+    }
+
 }

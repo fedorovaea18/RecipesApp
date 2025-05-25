@@ -3,5 +3,6 @@
     <string name="text_categories">Категории</string>
     <string name="text_favourites">Избранное</string>
     <string name="image_description_category">Изображение категории %1$s</string>
+    <string name="image_description_recipe">Изображение рецепта %1$s</string>
 
 </resources>

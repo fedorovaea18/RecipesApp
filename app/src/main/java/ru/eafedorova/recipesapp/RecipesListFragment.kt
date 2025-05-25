@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import ru.eafedorova.recipesapp.databinding.FragmentListRecipesBinding
 
 class RecipesListFragment : Fragment() {
@@ -22,7 +24,10 @@ class RecipesListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         categoryId = requireArguments().getInt(CategoriesListFragment.ARG_CATEGORY_ID)
         categoryName = requireArguments().getString(CategoriesListFragment.ARG_CATEGORY_NAME)
-        categoryImageUrl = requireArguments().getString(CategoriesListFragment.ARG_CATEGORY_IMAGE_URL)
+        categoryImageUrl =
+            requireArguments().getString(CategoriesListFragment.ARG_CATEGORY_IMAGE_URL)
+
+        initRecycler()
     }
 
     override fun onCreateView(
@@ -38,6 +43,25 @@ class RecipesListFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun initRecycler() {
+        val recipesAdapter = RecipeListAdapter(STUB.getRecipesByCategoryId(categoryId ?: 0))
+        binding.rvRecipes.adapter = recipesAdapter
+        recipesAdapter.setOnItemClickListener(object :
+            RecipeListAdapter.OnItemClickListener {
+            override fun onItemClick(recipeId: Int) {
+                openRecipeByRecipeId(recipeId)
+            }
+        })
+    }
+
+    private fun openRecipeByRecipeId(recipeId: Int) {
+        parentFragmentManager.commit {
+            replace<RecipeFragment>(R.id.mainContainer)
+            setReorderingAllowed(true)
+            addToBackStack(null)
+        }
     }
 
 }

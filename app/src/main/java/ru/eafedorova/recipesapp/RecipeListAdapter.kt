@@ -34,7 +34,7 @@ class RecipeListAdapter(private val dataSet: List<Recipe>) :
                     binding.root.context?.assets?.open(recipe.imageUrl)
                 Drawable.createFromStream(inputStream, null)
             } catch (e: IOException) {
-                Log.e("CategoriesListAdapter", "Ошибка при загрузке изображения: ${e.message}", e)
+                Log.e("RecipeListAdapter", "Ошибка при загрузке изображения: ${e.message}", e)
                 null
             }
             binding.ivImageRecipe.setImageDrawable(drawable)

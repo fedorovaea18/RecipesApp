@@ -9,3 +9,4 @@ data class Ingredient(
     val unitOfMeasure: String,
     val description: String,
 ) : Parcelable
+

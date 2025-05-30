@@ -38,7 +38,7 @@ class RecipesListFragment : Fragment() {
 
     }
 
-    private fun getHeaderCategory() {
+    private fun initUI() {
 
         binding.tvTitleCategoryRecipe.text = categoryName
 
@@ -56,7 +56,7 @@ class RecipesListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getHeaderCategory()
+        initUI()
         initRecycler()
     }
 

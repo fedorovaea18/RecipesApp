@@ -4,6 +4,7 @@
                     <!--Space-->
     <dimen name="main_space_16">16dp</dimen>
     <dimen name="main_space_half_8">8dp</dimen>
+    <dimen name="medium_space_12">12dp</dimen>
     <dimen name="medium_space_10">10dp</dimen>
     <dimen name="small_space_2">2dp</dimen>
 
@@ -19,5 +20,6 @@
     <dimen name="_130">130dp</dimen>
     <dimen name="_224">224dp</dimen>
     <dimen name="_100">100dp</dimen>
+    <dimen name="_242">242dp</dimen>
 
 </resources>

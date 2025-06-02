@@ -1,13 +1,20 @@
 package ru.eafedorova.recipesapp
 
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.divider.MaterialDividerItemDecoration
 import ru.eafedorova.recipesapp.RecipesListFragment.Companion.ARG_RECIPE
 import ru.eafedorova.recipesapp.databinding.FragmentRecipeBinding
+import java.io.IOException
+import java.io.InputStream
 
 class RecipeFragment : Fragment() {
 
@@ -19,9 +26,7 @@ class RecipeFragment : Fragment() {
     private var recipe: Recipe? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
 
         _binding = FragmentRecipeBinding.inflate(inflater, container, false)
@@ -38,15 +43,53 @@ class RecipeFragment : Fragment() {
         recipe = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             arguments?.getParcelable(ARG_RECIPE, Recipe::class.java)
         } else {
-            @Suppress("DEPRECATION")
-            arguments?.getParcelable(ARG_RECIPE)
+            @Suppress("DEPRECATION") arguments?.getParcelable(ARG_RECIPE)
         }
+        initUI()
         recipe?.let {
-            binding.tvTitleRecipe.text = it.title
+            binding.tvTitleRecipeName.text = it.title
+            initRecycler(it)
         } ?: run {
-            binding.tvTitleRecipe.text = "Рецепт не найден"
+            binding.tvTitleRecipeName.text = "Рецепт не найден"
 
         }
+    }
+
+    private fun initRecycler(recipe: Recipe) {
+        val dividerItemDecoration = MaterialDividerItemDecoration(
+            binding.rvIngredients.context, LinearLayoutManager.VERTICAL
+        ).apply {
+            dividerColor = ContextCompat.getColor(
+                binding.rvIngredients.context,
+                R.color.horizontal_border_color
+            )
+            dividerInsetStart = resources.getDimensionPixelSize(R.dimen.medium_space_12)
+            dividerInsetEnd = resources.getDimensionPixelSize(R.dimen.medium_space_12)
+            isLastItemDecorated = false
+        }
+
+        val ingredientsAdapter = IngredientsAdapter(recipe.ingredients)
+        val methodAdapter = MethodAdapter(recipe.method)
+        binding.rvIngredients.adapter = ingredientsAdapter
+        binding.rvMethod.adapter = methodAdapter
+        binding.rvIngredients.addItemDecoration(dividerItemDecoration)
+        binding.rvMethod.addItemDecoration(dividerItemDecoration)
+
+    }
+
+    private fun initUI() {
+        binding.tvTitleRecipeName.text = recipe?.title ?: " "
+
+        val drawable = try {
+            val inputStream: InputStream? =
+                recipe?.let { binding.root.context?.assets?.open(it.imageUrl) }
+            Drawable.createFromStream(inputStream, null)
+        } catch (e: IOException) {
+            Log.e("RecipeFragment", "Ошибка при загрузке изображения: ${e.message}", e)
+            null
+        }
+
+        binding.ivImageRecipe.setImageDrawable(drawable)
     }
 
 }

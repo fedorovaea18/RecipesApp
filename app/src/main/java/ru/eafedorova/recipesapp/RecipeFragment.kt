@@ -7,7 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
+import android.widget.SeekBar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.divider.MaterialDividerItemDecoration
@@ -59,12 +59,9 @@ class RecipeFragment : Fragment() {
         val dividerItemDecoration = MaterialDividerItemDecoration(
             binding.rvIngredients.context, LinearLayoutManager.VERTICAL
         ).apply {
-            dividerColor = ContextCompat.getColor(
-                binding.rvIngredients.context,
-                R.color.horizontal_border_color
-            )
-            dividerInsetStart = resources.getDimensionPixelSize(R.dimen.medium_space_12)
-            dividerInsetEnd = resources.getDimensionPixelSize(R.dimen.medium_space_12)
+            setDividerColorResource(binding.rvIngredients.context, R.color.horizontal_border_color)
+            setDividerInsetStartResource(binding.rvIngredients.context, R.dimen.medium_space_12)
+            setDividerInsetEndResource(binding.rvIngredients.context, R.dimen.medium_space_12)
             isLastItemDecorated = false
         }
 
@@ -74,6 +71,16 @@ class RecipeFragment : Fragment() {
         binding.rvMethod.adapter = methodAdapter
         binding.rvIngredients.addItemDecoration(dividerItemDecoration)
         binding.rvMethod.addItemDecoration(dividerItemDecoration)
+
+        binding.sbPortionCount.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                ingredientsAdapter.updateIngredients(progress)
+                binding.tvPortionCount.text = progress.toString()
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
 
     }
 

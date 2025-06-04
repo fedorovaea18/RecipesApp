@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:android="http://schemas.android.com/apk/res/android">
+<resources>
 
                     <!--Space-->
     <dimen name="main_space_16">16dp</dimen>
     <dimen name="main_space_half_8">8dp</dimen>
     <dimen name="medium_space_12">12dp</dimen>
     <dimen name="medium_space_10">10dp</dimen>
-    <dimen name="small_space_2">2dp</dimen>
+    <dimen name="small_space_6">6dp</dimen>
+    <dimen name="small_space_4">4dp</dimen>
+    <dimen name="extra_small_space_2">2dp</dimen>
 
                     <!--Text size-->
     <dimen name="text_size_12">12sp</dimen>
     <dimen name="text_size_14">14sp</dimen>
+    <dimen name="text_size_16">16sp</dimen>
     <dimen name="text_size_20">20sp</dimen>
 
                 <!--Corner radius-->

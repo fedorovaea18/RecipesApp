@@ -31,7 +31,7 @@
             android:layout_marginBottom="@dimen/main_space_16"
             android:background="@drawable/shape_rounded_background"
             android:padding="@dimen/medium_space_10"
-            android:text="Название категории"
+            tools:text="Название категории"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 

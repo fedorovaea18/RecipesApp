@@ -79,6 +79,7 @@
             android:layout_height="wrap_content"
             android:max="5"
             android:min="1"
+            style="@style/StyleSeekBar"
             android:progress="1" />
 
         <androidx.recyclerview.widget.RecyclerView

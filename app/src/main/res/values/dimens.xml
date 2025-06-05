@@ -18,6 +18,14 @@
 
                 <!--Corner radius-->
     <dimen name="corner_radius_8">8dp</dimen>
+    <dimen name="corner_radius_4">4dp</dimen>
+    <dimen name="corner_radius_2">2dp</dimen>
+
+                <!--SeekBar size-->
+    <dimen name="seek_bar_8">8dp</dimen>
+    <dimen name="seek_bar_16">16dp</dimen>
+    <dimen name="seek_bar_30">30dp</dimen>
+    <dimen name="seek_bar_328">328dp</dimen>
 
                 <!--Other size-->
     <dimen name="_130">130dp</dimen>

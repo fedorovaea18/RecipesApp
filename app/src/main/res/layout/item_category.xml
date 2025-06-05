@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginHorizontal="@dimen/main_space_half_8"
     android:layout_marginVertical="@dimen/main_space_half_8"
     android:background="@color/white_color"
@@ -29,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/main_space_half_8"
-            android:text="Название категории" />
+            tools:text="Название категории" />
 
         <TextView
             android:id="@+id/tvDescriptionCategory"
@@ -39,7 +40,7 @@
             android:layout_marginStart="@dimen/main_space_half_8"
             android:layout_marginEnd="@dimen/main_space_half_8"
             android:layout_marginBottom="@dimen/medium_space_10"
-            android:text="Описание категории" />
+            tools:text="Описание категории" />
 
     </LinearLayout>
 

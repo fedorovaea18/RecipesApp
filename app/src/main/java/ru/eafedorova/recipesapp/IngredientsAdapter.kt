@@ -1,5 +1,6 @@
 package ru.eafedorova.recipesapp
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -8,11 +9,27 @@ import ru.eafedorova.recipesapp.databinding.ItemIngredientBinding
 class IngredientsAdapter(private val dataSet: List<Ingredient>) :
     RecyclerView.Adapter<IngredientsAdapter.ViewHolder>() {
 
+    private var quantity: Int = 1
+
     class ViewHolder(private val binding: ItemIngredientBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(ingredient: Ingredient) {
+        fun bind(ingredient: Ingredient, quantity: Int) {
+            val totalQuantity = ingredient.quantity.toDouble() * quantity
+            binding.tvIngredientAmount.text =
+                if (totalQuantity % 1 == 0.0) {
+                    "${totalQuantity.toInt()} ${ingredient.unitOfMeasure}"
+                } else {
+                    "${totalQuantity.toString().format("%.1f")} ${ingredient.unitOfMeasure}"
+                }
+
             binding.tvIngredientName.text = ingredient.description
-            binding.tvIngredientAmount.text = "${ingredient.quantity} ${ingredient.unitOfMeasure}"
+
         }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateIngredients(progress: Int) {
+        quantity = progress
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -22,7 +39,7 @@ class IngredientsAdapter(private val dataSet: List<Ingredient>) :
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        viewHolder.bind(dataSet[position])
+        viewHolder.bind(dataSet[position], quantity)
     }
 
     override fun getItemCount() = dataSet.size

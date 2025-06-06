@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background_color">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -69,7 +70,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/small_space_6"
-                android:text="1" />
+                android:text="@string/text_portions_count_default" />
 
         </LinearLayout>
 
@@ -87,7 +88,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:background="@drawable/shape_rounded_background"
+            android:background="@drawable/shape_rounded_recipe"
             android:layout_marginHorizontal="@dimen/main_space_16"
             android:layout_marginTop="@dimen/main_space_16"
             android:paddingVertical="@dimen/small_space_4"
@@ -109,7 +110,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:background="@drawable/shape_rounded_background"
+                android:background="@drawable/shape_rounded_recipe"
                 android:layout_marginHorizontal="@dimen/main_space_16"
                 android:layout_marginBottom="@dimen/main_space_half_8"
                 android:paddingVertical="@dimen/small_space_4"

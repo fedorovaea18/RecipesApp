@@ -5,6 +5,7 @@
     <string name="text_ingredients">Ингредиенты</string>
     <string name="text_method">Способ приготовления</string>
     <string name="text_portions">Порции:</string>
+    <string name="text_portions_count_default">1</string>
     <string name="image_description_category">Изображение категории %1$s</string>
     <string name="image_description_recipe">Изображение рецепта %1$s</string>
 

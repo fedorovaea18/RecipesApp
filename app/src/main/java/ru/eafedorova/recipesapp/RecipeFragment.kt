@@ -25,6 +25,8 @@ class RecipeFragment : Fragment() {
 
     private var recipe: Recipe? = null
 
+    private var isFavorite = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -97,6 +99,17 @@ class RecipeFragment : Fragment() {
         }
 
         binding.ivImageRecipe.setImageDrawable(drawable)
+
+        binding.ibIconHeart.setImageResource(R.drawable.ic_heart_empty)
+        binding.ibIconHeart.setOnClickListener {
+            isFavorite = !isFavorite
+            if (isFavorite) {
+                binding.ibIconHeart.setImageResource(R.drawable.ic_heart)
+            } else {
+                binding.ibIconHeart.setImageResource(R.drawable.ic_heart_empty)
+            }
+        }
+
     }
 
 }

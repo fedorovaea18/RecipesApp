@@ -3,7 +3,6 @@
 
     <solid android:color="@color/progress_scale_color" />
     <corners android:radius="@dimen/corner_radius_4" />
-    <size
-        android:height="16dp" />
+    <size android:height="16dp" />
 
 </shape>

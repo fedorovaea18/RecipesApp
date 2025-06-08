@@ -36,19 +36,34 @@
                 android:background="@drawable/shape_rounded_background"
                 android:maxWidth="@dimen/_242"
                 android:padding="@dimen/medium_space_10"
-                tools:text="Название рецепта"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="Название рецепта" />
 
-            <TextView
-                android:id="@+id/tvIngredientsRecipe"
-                style="@style/StyleTitle20"
+            <ImageButton
+                android:id="@+id/ibIconHeart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/main_space_16"
-                android:layout_marginTop="@dimen/main_space_16"
-                android:text="@string/text_ingredients" />
+                android:layout_margin="@dimen/main_space_16"
+                android:background="@android:color/transparent"
+                android:clickable="true"
+                android:contentDescription="@string/image_description_icon_heart"
+                android:focusable="true"
+                android:foreground="?selectableItemBackground"
+                android:src="@drawable/ic_heart_empty"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tvIngredientsRecipe"
+            style="@style/StyleTitle20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/main_space_16"
+            android:layout_marginTop="@dimen/main_space_16"
+            android:text="@string/text_ingredients" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -76,48 +91,46 @@
 
         <SeekBar
             android:id="@+id/sbPortionCount"
+            style="@style/StyleSeekBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:max="5"
             android:min="1"
-            style="@style/StyleSeekBar"
             android:progress="1" />
 
         <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvIngredients"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-            android:background="@drawable/shape_rounded_recipe"
+            android:id="@+id/rvIngredients"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/main_space_16"
             android:layout_marginTop="@dimen/main_space_16"
+            android:background="@drawable/shape_rounded_recipe"
             android:paddingVertical="@dimen/small_space_4"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:spanCount="1"
-                tools:listitem="@layout/item_ingredient" />
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:spanCount="1"
+            tools:listitem="@layout/item_ingredient" />
 
-            <TextView
-                android:id="@+id/tvMethodRecipe"
-                style="@style/StyleTitle20"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="@dimen/main_space_16"
-                android:layout_marginStart="@dimen/main_space_16"
-                android:text="@string/text_method" />
+        <TextView
+            android:id="@+id/tvMethodRecipe"
+            style="@style/StyleTitle20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/main_space_16"
+            android:layout_marginStart="@dimen/main_space_16"
+            android:text="@string/text_method" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvMethod"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:background="@drawable/shape_rounded_recipe"
-                android:layout_marginHorizontal="@dimen/main_space_16"
-                android:layout_marginBottom="@dimen/main_space_half_8"
-                android:paddingVertical="@dimen/small_space_4"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:spanCount="1"
-                tools:listitem="@layout/item_method" />
-        </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvMethod"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/main_space_16"
+            android:layout_marginBottom="@dimen/main_space_half_8"
+            android:background="@drawable/shape_rounded_recipe"
+            android:paddingVertical="@dimen/small_space_4"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:spanCount="1"
+            tools:listitem="@layout/item_method" />
+    </LinearLayout>
 
 
 </androidx.core.widget.NestedScrollView>

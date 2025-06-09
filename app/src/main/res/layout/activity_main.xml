@@ -51,7 +51,7 @@
             android:paddingTop="@dimen/medium_space_10"
             android:paddingBottom="@dimen/medium_space_10"
             android:text="@string/text_favourites"
-            app:icon="@drawable/ic_heart"
+            app:icon="@drawable/ic_heart_empty"
             app:iconGravity="textEnd" />
 
     </LinearLayout>

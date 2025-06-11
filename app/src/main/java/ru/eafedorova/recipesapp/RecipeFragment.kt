@@ -12,7 +12,9 @@ import android.widget.SeekBar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.divider.MaterialDividerItemDecoration
-import ru.eafedorova.recipesapp.RecipesListFragment.Companion.ARG_RECIPE
+import ru.eafedorova.recipesapp.Constants.ARG_RECIPE
+import ru.eafedorova.recipesapp.Constants.KEY_FAVORITE_RECIPES
+import ru.eafedorova.recipesapp.Constants.PREFS_FAVORITE_RECIPES
 import ru.eafedorova.recipesapp.databinding.FragmentRecipeBinding
 import java.io.IOException
 import java.io.InputStream
@@ -25,11 +27,6 @@ class RecipeFragment : Fragment() {
             ?: throw IllegalStateException("binding for RecipeFragment must not be null")
 
     private var recipe: Recipe? = null
-
-    companion object {
-        private const val PREFS_FAVORITE_RECIPES = "prefs_favorite_recipes"
-        private const val KEY_FAVORITE_RECIPES = "key_favorite_recipes"
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?

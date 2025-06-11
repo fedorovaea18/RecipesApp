@@ -8,6 +8,9 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
+import ru.eafedorova.recipesapp.Constants.ARG_CATEGORY_ID
+import ru.eafedorova.recipesapp.Constants.ARG_CATEGORY_IMAGE_URL
+import ru.eafedorova.recipesapp.Constants.ARG_CATEGORY_NAME
 import ru.eafedorova.recipesapp.databinding.FragmentListCategoriesBinding
 
 class CategoriesListFragment : Fragment() {
@@ -17,11 +20,6 @@ class CategoriesListFragment : Fragment() {
         get() = _binding
             ?: throw IllegalStateException("binding for CategoriesListFragment must not be null")
 
-    companion object {
-        const val ARG_CATEGORY_ID = "arg_category_id"
-        const val ARG_CATEGORY_NAME = "arg_category_name"
-        const val ARG_CATEGORY_IMAGE_URL = "arg_category_image_url"
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?

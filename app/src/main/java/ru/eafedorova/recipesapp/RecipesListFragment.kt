@@ -10,6 +10,10 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
+import ru.eafedorova.recipesapp.Constants.ARG_CATEGORY_ID
+import ru.eafedorova.recipesapp.Constants.ARG_CATEGORY_IMAGE_URL
+import ru.eafedorova.recipesapp.Constants.ARG_CATEGORY_NAME
+import ru.eafedorova.recipesapp.Constants.ARG_RECIPE
 import ru.eafedorova.recipesapp.databinding.FragmentListRecipesBinding
 import java.io.IOException
 import java.io.InputStream
@@ -25,16 +29,12 @@ class RecipesListFragment : Fragment() {
     private var categoryName: String? = null
     private var categoryImageUrl: String? = null
 
-    companion object {
-        const val ARG_RECIPE = "arg_recipe"
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        categoryId = requireArguments().getInt(CategoriesListFragment.ARG_CATEGORY_ID)
-        categoryName = requireArguments().getString(CategoriesListFragment.ARG_CATEGORY_NAME)
+        categoryId = requireArguments().getInt(ARG_CATEGORY_ID)
+        categoryName = requireArguments().getString(ARG_CATEGORY_NAME)
         categoryImageUrl =
-            requireArguments().getString(CategoriesListFragment.ARG_CATEGORY_IMAGE_URL)
+            requireArguments().getString(ARG_CATEGORY_IMAGE_URL)
 
     }
 

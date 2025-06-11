@@ -1,5 +1,6 @@
 package ru.eafedorova.recipesapp
 
+import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
@@ -25,7 +26,10 @@ class RecipeFragment : Fragment() {
 
     private var recipe: Recipe? = null
 
-    private var isFavorite = false
+    companion object {
+        private const val PREFS_FAVORITE_RECIPES = "prefs_favorite_recipes"
+        private const val KEY_FAVORITE_RECIPES = "key_favorite_recipes"
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -86,6 +90,23 @@ class RecipeFragment : Fragment() {
 
     }
 
+    private fun saveFavorites(recipeIds: Set<String>) {
+        val sharedPrefs =
+            requireContext().getSharedPreferences(PREFS_FAVORITE_RECIPES, Context.MODE_PRIVATE)
+                ?: return
+        with(sharedPrefs.edit()) {
+            putStringSet(KEY_FAVORITE_RECIPES, recipeIds)
+            apply()
+        }
+    }
+
+    private fun getFavorites(): MutableSet<String> {
+        val sharedPrefs =
+            requireContext().getSharedPreferences(PREFS_FAVORITE_RECIPES, Context.MODE_PRIVATE)
+        return HashSet(sharedPrefs.getStringSet(KEY_FAVORITE_RECIPES, emptySet()) ?: emptySet())
+    }
+
+
     private fun initUI() {
         binding.tvTitleRecipeName.text = recipe?.title ?: " "
 
@@ -100,14 +121,29 @@ class RecipeFragment : Fragment() {
 
         binding.ivImageRecipe.setImageDrawable(drawable)
 
-        binding.ibIconHeart.setImageResource(R.drawable.ic_heart_empty)
+        val favoriteSet = getFavorites()
+        val recipeId = recipe?.id.toString()
+        var isFavorite = favoriteSet.contains(recipeId)
+
+        updateFavoriteIcon(isFavorite)
+
         binding.ibIconHeart.setOnClickListener {
-            isFavorite = !isFavorite
             if (isFavorite) {
-                binding.ibIconHeart.setImageResource(R.drawable.ic_heart)
+                favoriteSet.remove(recipeId)
             } else {
-                binding.ibIconHeart.setImageResource(R.drawable.ic_heart_empty)
+                favoriteSet.add(recipeId)
             }
+            saveFavorites(favoriteSet)
+            isFavorite = !isFavorite
+            updateFavoriteIcon(isFavorite)
+        }
+    }
+
+    private fun updateFavoriteIcon(isFavorite: Boolean) {
+        if (isFavorite) {
+            binding.ibIconHeart.setImageResource(R.drawable.ic_heart)
+        } else {
+            binding.ibIconHeart.setImageResource(R.drawable.ic_heart_empty)
         }
 
     }

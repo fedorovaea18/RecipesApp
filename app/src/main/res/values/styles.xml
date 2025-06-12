@@ -47,6 +47,12 @@
         <item name="android:textColor">@color/text_description_color</item>
     </style>
 
+    <style name="StyleFavoritesEmpty" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/text_size_16</item>
+        <item name="android:fontFamily">@font/montserrat_regular</item>
+        <item name="android:textColor">@color/text_description_color</item>
+    </style>
+
     <style name="StyleSeekBar" parent="TextAppearance.AppCompat">
         <item name="android:thumb">@drawable/shape_seekbar_thumb</item>
         <item name="android:progressDrawable">@drawable/shape_seekbar_progress</item>

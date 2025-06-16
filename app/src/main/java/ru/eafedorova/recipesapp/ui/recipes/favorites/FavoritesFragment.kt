@@ -1,4 +1,4 @@
-package ru.eafedorova.recipesapp
+package ru.eafedorova.recipesapp.ui.recipes.favorites
 
 import android.content.Context
 import android.os.Bundle
@@ -12,7 +12,11 @@ import androidx.fragment.app.replace
 import ru.eafedorova.recipesapp.Constants.ARG_RECIPE
 import ru.eafedorova.recipesapp.Constants.KEY_FAVORITE_RECIPES
 import ru.eafedorova.recipesapp.Constants.PREFS_FAVORITE_RECIPES
+import ru.eafedorova.recipesapp.R
+import ru.eafedorova.recipesapp.data.STUB
 import ru.eafedorova.recipesapp.databinding.FragmentFavoritesBinding
+import ru.eafedorova.recipesapp.ui.recipes.recipe.RecipeFragment
+import ru.eafedorova.recipesapp.ui.recipes.recipesList.RecipeListAdapter
 
 class FavoritesFragment : Fragment() {
 

@@ -1,4 +1,4 @@
-package ru.eafedorova.recipesapp
+package ru.eafedorova.recipesapp.ui.recipes.recipe
 
 import android.content.Context
 import android.graphics.drawable.Drawable
@@ -15,7 +15,9 @@ import com.google.android.material.divider.MaterialDividerItemDecoration
 import ru.eafedorova.recipesapp.Constants.ARG_RECIPE
 import ru.eafedorova.recipesapp.Constants.KEY_FAVORITE_RECIPES
 import ru.eafedorova.recipesapp.Constants.PREFS_FAVORITE_RECIPES
+import ru.eafedorova.recipesapp.R
 import ru.eafedorova.recipesapp.databinding.FragmentRecipeBinding
+import ru.eafedorova.recipesapp.model.Recipe
 import java.io.IOException
 import java.io.InputStream
 
@@ -78,7 +80,7 @@ class RecipeFragment : Fragment() {
         binding.sbPortionCount.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 ingredientsAdapter.updateIngredients(progress)
-                binding.tvPortionCount.text = progress.toString()
+                binding.tvPortionsCount.text = progress.toString()
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}

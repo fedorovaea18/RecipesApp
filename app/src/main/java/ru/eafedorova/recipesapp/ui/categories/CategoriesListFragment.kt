@@ -1,4 +1,4 @@
-package ru.eafedorova.recipesapp
+package ru.eafedorova.recipesapp.ui.categories
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,7 +11,10 @@ import androidx.fragment.app.replace
 import ru.eafedorova.recipesapp.Constants.ARG_CATEGORY_ID
 import ru.eafedorova.recipesapp.Constants.ARG_CATEGORY_IMAGE_URL
 import ru.eafedorova.recipesapp.Constants.ARG_CATEGORY_NAME
+import ru.eafedorova.recipesapp.R
+import ru.eafedorova.recipesapp.data.STUB
 import ru.eafedorova.recipesapp.databinding.FragmentListCategoriesBinding
+import ru.eafedorova.recipesapp.ui.recipes.recipesList.RecipesListFragment
 
 class CategoriesListFragment : Fragment() {
 

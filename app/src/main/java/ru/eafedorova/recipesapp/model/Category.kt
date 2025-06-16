@@ -1,4 +1,4 @@
-package ru.eafedorova.recipesapp
+package ru.eafedorova.recipesapp.model
 
 data class Category(
     val id: Int,

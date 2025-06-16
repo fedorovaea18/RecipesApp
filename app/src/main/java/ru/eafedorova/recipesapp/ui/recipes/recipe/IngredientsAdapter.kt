@@ -1,10 +1,11 @@
-package ru.eafedorova.recipesapp
+package ru.eafedorova.recipesapp.ui.recipes.recipe
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.eafedorova.recipesapp.databinding.ItemIngredientBinding
+import ru.eafedorova.recipesapp.model.Ingredient
 import java.math.BigDecimal
 import java.math.RoundingMode
 

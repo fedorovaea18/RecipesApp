@@ -1,4 +1,8 @@
-package ru.eafedorova.recipesapp
+package ru.eafedorova.recipesapp.data
+
+import ru.eafedorova.recipesapp.model.Category
+import ru.eafedorova.recipesapp.model.Ingredient
+import ru.eafedorova.recipesapp.model.Recipe
 
 object STUB {
     private val categories = listOf<Category>(

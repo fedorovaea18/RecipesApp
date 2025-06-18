@@ -1,11 +1,13 @@
-package ru.eafedorova.recipesapp
+package ru.eafedorova.recipesapp.ui.categories
 
 import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import ru.eafedorova.recipesapp.R
 import ru.eafedorova.recipesapp.databinding.ItemCategoryBinding
+import ru.eafedorova.recipesapp.model.Category
 import java.io.IOException
 import java.io.InputStream
 

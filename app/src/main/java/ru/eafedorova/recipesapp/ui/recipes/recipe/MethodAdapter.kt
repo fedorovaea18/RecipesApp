@@ -1,4 +1,4 @@
-package ru.eafedorova.recipesapp
+package ru.eafedorova.recipesapp.ui.recipes.recipe
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

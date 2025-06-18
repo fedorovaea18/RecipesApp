@@ -1,4 +1,4 @@
-package ru.eafedorova.recipesapp
+package ru.eafedorova.recipesapp.ui.recipes.recipesList
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -14,7 +14,10 @@ import ru.eafedorova.recipesapp.Constants.ARG_CATEGORY_ID
 import ru.eafedorova.recipesapp.Constants.ARG_CATEGORY_IMAGE_URL
 import ru.eafedorova.recipesapp.Constants.ARG_CATEGORY_NAME
 import ru.eafedorova.recipesapp.Constants.ARG_RECIPE
+import ru.eafedorova.recipesapp.R
+import ru.eafedorova.recipesapp.data.STUB
 import ru.eafedorova.recipesapp.databinding.FragmentListRecipesBinding
+import ru.eafedorova.recipesapp.ui.recipes.recipe.RecipeFragment
 import java.io.IOException
 import java.io.InputStream
 

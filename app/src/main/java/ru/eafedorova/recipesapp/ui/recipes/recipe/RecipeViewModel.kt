@@ -25,12 +25,11 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         val recipe = STUB.getRecipeById(recipeId)
         val favoriteSet = getFavorites()
         val isFavorite = favoriteSet.contains(recipeId.toString())
-        val currentPortionsCount = _recipeState.value?.portionsCount ?: 1
 
-        _recipeState.value = RecipeState(
+        _recipeState.value = recipeState.value?.copy(
             recipe = recipe,
             isFavorite = isFavorite,
-            portionsCount = currentPortionsCount,
+            portionsCount = 1,
         )
 
     }
@@ -58,7 +57,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun onFavoritesClicked() {
-        val currentState = _recipeState.value ?: return
+        val currentState = recipeState.value ?: return
         val recipeId = currentState.recipe?.id.toString()
 
         val favoriteSet = getFavorites()

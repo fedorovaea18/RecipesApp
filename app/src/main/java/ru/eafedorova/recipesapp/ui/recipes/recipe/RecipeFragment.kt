@@ -43,14 +43,14 @@ class RecipeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val recipeId = arguments?.getInt(ARG_RECIPE_ID) ?: run {
-            binding.tvTitleRecipeName.text = "Рецепт не найден"
+            binding.tvTitleRecipeName.text = getString(R.string.recipe_not_found)
             return
         }
-        initUI()
-        viewModel.loadRecipe(recipeId)
+        initUI(recipeId)
     }
 
     private fun initRecycler(recipe: Recipe) {
+
         val dividerItemDecoration = MaterialDividerItemDecoration(
             binding.rvIngredients.context, LinearLayoutManager.VERTICAL
         ).apply {
@@ -79,8 +79,9 @@ class RecipeFragment : Fragment() {
 
     }
 
-    private fun initUI() {
+    private fun initUI(recipeId: Int) {
 
+        viewModel.loadRecipe(recipeId)
         viewModel.recipeState.observe(viewLifecycleOwner) { state ->
 
             state.recipe?.let { recipe ->
@@ -104,6 +105,7 @@ class RecipeFragment : Fragment() {
                 initRecycler(recipe)
 
             }
+
         }
 
         binding.ibIconHeart.setOnClickListener {

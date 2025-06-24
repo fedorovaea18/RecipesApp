@@ -1,8 +1,6 @@
 package ru.eafedorova.recipesapp.ui.recipes.recipe
 
-import android.content.Context
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,9 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.divider.MaterialDividerItemDecoration
-import ru.eafedorova.recipesapp.Constants.ARG_RECIPE
-import ru.eafedorova.recipesapp.Constants.KEY_FAVORITE_RECIPES
-import ru.eafedorova.recipesapp.Constants.PREFS_FAVORITE_RECIPES
+import ru.eafedorova.recipesapp.Constants.ARG_RECIPE_ID
 import ru.eafedorova.recipesapp.R
 import ru.eafedorova.recipesapp.databinding.FragmentRecipeBinding
 import ru.eafedorova.recipesapp.model.Recipe
@@ -28,8 +24,6 @@ class RecipeFragment : Fragment() {
     private val binding
         get() = _binding
             ?: throw IllegalStateException("binding for RecipeFragment must not be null")
-
-    private var recipe: Recipe? = null
 
     private val viewModel: RecipeViewModel by viewModels()
 
@@ -48,25 +42,15 @@ class RecipeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recipe = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            arguments?.getParcelable(ARG_RECIPE, Recipe::class.java)
-        } else {
-            @Suppress("DEPRECATION") arguments?.getParcelable(ARG_RECIPE)
+        val recipeId = arguments?.getInt(ARG_RECIPE_ID) ?: run {
+            binding.tvTitleRecipeName.text = getString(R.string.recipe_not_found)
+            return
         }
-        initUI()
-        recipe?.let {
-            binding.tvTitleRecipeName.text = it.title
-            initRecycler(it)
-        } ?: run {
-            binding.tvTitleRecipeName.text = "Рецепт не найден"
-        }
-
-        viewModel.recipeState.observe(viewLifecycleOwner) { state ->
-            Log.i("!!!", "isFavorite = ${state.isFavorite}")
-        }
+        initUI(recipeId)
     }
 
     private fun initRecycler(recipe: Recipe) {
+
         val dividerItemDecoration = MaterialDividerItemDecoration(
             binding.rvIngredients.context, LinearLayoutManager.VERTICAL
         ).apply {
@@ -95,62 +79,39 @@ class RecipeFragment : Fragment() {
 
     }
 
-    private fun saveFavorites(recipeIds: Set<String>) {
-        val sharedPrefs =
-            requireContext().getSharedPreferences(PREFS_FAVORITE_RECIPES, Context.MODE_PRIVATE)
-                ?: return
-        with(sharedPrefs.edit()) {
-            putStringSet(KEY_FAVORITE_RECIPES, recipeIds)
-            apply()
+    private fun initUI(recipeId: Int) {
+
+        viewModel.loadRecipe(recipeId)
+        viewModel.recipeState.observe(viewLifecycleOwner) { state ->
+
+            state.recipe?.let { recipe ->
+
+                binding.tvTitleRecipeName.text = recipe.title
+
+                val drawable = try {
+                    val inputStream: InputStream =
+                        state.recipe.let { binding.root.context.assets.open(it.imageUrl) }
+                    Drawable.createFromStream(inputStream, null)
+                } catch (e: IOException) {
+                    Log.e("RecipeFragment", "Ошибка при загрузке изображения: ${e.message}", e)
+                    null
+                }
+                binding.ivImageRecipe.setImageDrawable(drawable)
+
+                binding.ibIconHeart.setImageResource(
+                    if (state.isFavorite) R.drawable.ic_heart else R.drawable.ic_heart_empty
+                )
+
+                initRecycler(recipe)
+
+            }
+
         }
-    }
-
-    private fun getFavorites(): MutableSet<String> {
-        val sharedPrefs =
-            requireContext().getSharedPreferences(PREFS_FAVORITE_RECIPES, Context.MODE_PRIVATE)
-        return HashSet(sharedPrefs.getStringSet(KEY_FAVORITE_RECIPES, emptySet()) ?: emptySet())
-    }
-
-
-    private fun initUI() {
-        binding.tvTitleRecipeName.text = recipe?.title ?: " "
-
-        val drawable = try {
-            val inputStream: InputStream? =
-                recipe?.let { binding.root.context?.assets?.open(it.imageUrl) }
-            Drawable.createFromStream(inputStream, null)
-        } catch (e: IOException) {
-            Log.e("RecipeFragment", "Ошибка при загрузке изображения: ${e.message}", e)
-            null
-        }
-
-        binding.ivImageRecipe.setImageDrawable(drawable)
-
-        val favoriteSet = getFavorites()
-        val recipeId = recipe?.id.toString()
-        var isFavorite = favoriteSet.contains(recipeId)
-
-        updateFavoriteIcon(isFavorite)
 
         binding.ibIconHeart.setOnClickListener {
-            if (isFavorite) {
-                favoriteSet.remove(recipeId)
-            } else {
-                favoriteSet.add(recipeId)
-            }
-            saveFavorites(favoriteSet)
-            isFavorite = !isFavorite
-            updateFavoriteIcon(isFavorite)
-        }
-    }
-
-    private fun updateFavoriteIcon(isFavorite: Boolean) {
-        if (isFavorite) {
-            binding.ibIconHeart.setImageResource(R.drawable.ic_heart)
-        } else {
-            binding.ibIconHeart.setImageResource(R.drawable.ic_heart_empty)
+            viewModel.onFavoritesClicked()
         }
 
-    }
 
+    }
 }

@@ -2,6 +2,9 @@ package ru.eafedorova.recipesapp.ui.recipes.recipe
 
 import android.app.Application
 import android.content.Context
+import android.graphics.drawable.Drawable
+import android.media.Image
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,12 +12,15 @@ import ru.eafedorova.recipesapp.Constants.KEY_FAVORITE_RECIPES
 import ru.eafedorova.recipesapp.Constants.PREFS_FAVORITE_RECIPES
 import ru.eafedorova.recipesapp.data.STUB
 import ru.eafedorova.recipesapp.model.Recipe
+import java.io.IOException
+import java.io.InputStream
 
 class RecipeViewModel(application: Application) : AndroidViewModel(application) {
     data class RecipeState(
         val recipe: Recipe? = null,
         val isFavorite: Boolean = false,
         val portionsCount: Int = 1,
+        val recipeImage: Drawable? = null,
     )
 
     private val _recipeState = MutableLiveData(RecipeState())
@@ -26,10 +32,20 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         val favoriteSet = getFavorites()
         val isFavorite = favoriteSet.contains(recipeId.toString())
 
+        val drawable = try {
+            val inputStream: InputStream? =
+                recipe?.let { getApplication<Application>().applicationContext.assets.open(it.imageUrl) }
+            Drawable.createFromStream(inputStream, null)
+        } catch (e: IOException) {
+            Log.e("RecipeFragment", "Ошибка при загрузке изображения: ${e.message}", e)
+            null
+        }
+
         _recipeState.value = recipeState.value?.copy(
             recipe = recipe,
             isFavorite = isFavorite,
             portionsCount = 1,
+            recipeImage = drawable,
         )
 
     }

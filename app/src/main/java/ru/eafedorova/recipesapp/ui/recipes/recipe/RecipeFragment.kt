@@ -1,8 +1,6 @@
 package ru.eafedorova.recipesapp.ui.recipes.recipe
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,8 +13,6 @@ import ru.eafedorova.recipesapp.Constants.ARG_RECIPE_ID
 import ru.eafedorova.recipesapp.R
 import ru.eafedorova.recipesapp.databinding.FragmentRecipeBinding
 import ru.eafedorova.recipesapp.model.Recipe
-import java.io.IOException
-import java.io.InputStream
 
 class RecipeFragment : Fragment() {
 
@@ -82,21 +78,14 @@ class RecipeFragment : Fragment() {
     private fun initUI(recipeId: Int) {
 
         viewModel.loadRecipe(recipeId)
+
         viewModel.recipeState.observe(viewLifecycleOwner) { state ->
 
             state.recipe?.let { recipe ->
 
                 binding.tvTitleRecipeName.text = recipe.title
 
-                val drawable = try {
-                    val inputStream: InputStream =
-                        state.recipe.let { binding.root.context.assets.open(it.imageUrl) }
-                    Drawable.createFromStream(inputStream, null)
-                } catch (e: IOException) {
-                    Log.e("RecipeFragment", "Ошибка при загрузке изображения: ${e.message}", e)
-                    null
-                }
-                binding.ivImageRecipe.setImageDrawable(drawable)
+                binding.ivImageRecipe.setImageDrawable(state.recipeImage)
 
                 binding.ibIconHeart.setImageResource(
                     if (state.isFavorite) R.drawable.ic_heart else R.drawable.ic_heart_empty

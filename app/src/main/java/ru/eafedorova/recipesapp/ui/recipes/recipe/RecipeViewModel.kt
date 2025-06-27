@@ -3,7 +3,6 @@ package ru.eafedorova.recipesapp.ui.recipes.recipe
 import android.app.Application
 import android.content.Context
 import android.graphics.drawable.Drawable
-import android.media.Image
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -27,7 +26,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     val recipeState: LiveData<RecipeState> get() = _recipeState
 
     fun loadRecipe(recipeId: Int) {
-        //TODO("load from network)
+        // TODO("Load from network")
         val recipe = STUB.getRecipeById(recipeId)
         val favoriteSet = getFavorites()
         val isFavorite = favoriteSet.contains(recipeId.toString())
@@ -47,7 +46,6 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
             portionsCount = 1,
             recipeImage = drawable,
         )
-
     }
 
     private fun getFavorites(): MutableSet<String> {
@@ -90,6 +88,11 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         _recipeState.value = currentState.copy(isFavorite = !isFavorite)
     }
 
+    fun updatePortionsCount(newCount: Int) {
+        val currentState = _recipeState.value ?: return
+        _recipeState.value = currentState.copy(portionsCount = newCount)
+    }
 }
+
 
 

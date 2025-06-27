@@ -9,7 +9,7 @@ import ru.eafedorova.recipesapp.model.Ingredient
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-class IngredientsAdapter(private val dataSet: List<Ingredient>) :
+class IngredientsAdapter(private var dataSet: List<Ingredient>) :
     RecyclerView.Adapter<IngredientsAdapter.ViewHolder>() {
 
     private var quantity: Int = 1
@@ -29,8 +29,9 @@ class IngredientsAdapter(private val dataSet: List<Ingredient>) :
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateIngredients(progress: Int) {
-        quantity = progress
+    fun updateIngredients(newIngredients: List<Ingredient>, portionsCount: Int) {
+        dataSet = newIngredients
+        quantity = portionsCount
         notifyDataSetChanged()
     }
 

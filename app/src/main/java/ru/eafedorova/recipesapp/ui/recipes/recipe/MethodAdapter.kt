@@ -6,19 +6,20 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.eafedorova.recipesapp.databinding.ItemMethodBinding
 
-class MethodAdapter(private var dataSet: List<String>) :
+class MethodAdapter :
     RecyclerView.Adapter<MethodAdapter.ViewHolder>() {
+
+    var dataSet: List<String> = emptyList()
+        @SuppressLint("NotifyDataSetChanged")
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     class ViewHolder(private val binding: ItemMethodBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(stepNumber: Int, methodStep: String) {
             binding.tvMethod.text = "$stepNumber. $methodStep"
         }
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun updateMethod(newMethod: List<String>) {
-        dataSet = newMethod
-        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

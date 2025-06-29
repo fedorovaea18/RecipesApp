@@ -9,10 +9,22 @@ import ru.eafedorova.recipesapp.model.Ingredient
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-class IngredientsAdapter(private var dataSet: List<Ingredient>) :
+class IngredientsAdapter :
     RecyclerView.Adapter<IngredientsAdapter.ViewHolder>() {
 
-    private var quantity: Int = 1
+    var dataSet: List<Ingredient> = emptyList()
+        @SuppressLint("NotifyDataSetChanged")
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+
+    var quantity: Int = 1
+        @SuppressLint("NotifyDataSetChanged")
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     class ViewHolder(private val binding: ItemIngredientBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(ingredient: Ingredient, quantity: Int) {
@@ -26,13 +38,6 @@ class IngredientsAdapter(private var dataSet: List<Ingredient>) :
             binding.tvIngredientName.text = ingredient.description
 
         }
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun updateIngredients(newIngredients: List<Ingredient>, portionsCount: Int) {
-        dataSet = newIngredients
-        quantity = portionsCount
-        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

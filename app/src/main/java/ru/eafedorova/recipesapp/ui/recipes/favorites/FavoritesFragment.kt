@@ -1,6 +1,5 @@
 package ru.eafedorova.recipesapp.ui.recipes.favorites
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,11 +8,9 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
+import androidx.fragment.app.viewModels
 import ru.eafedorova.recipesapp.Constants.ARG_RECIPE_ID
-import ru.eafedorova.recipesapp.Constants.KEY_FAVORITE_RECIPES
-import ru.eafedorova.recipesapp.Constants.PREFS_FAVORITE_RECIPES
 import ru.eafedorova.recipesapp.R
-import ru.eafedorova.recipesapp.data.STUB
 import ru.eafedorova.recipesapp.databinding.FragmentFavoritesBinding
 import ru.eafedorova.recipesapp.ui.recipes.recipe.RecipeFragment
 import ru.eafedorova.recipesapp.ui.recipes.recipesList.RecipeListAdapter
@@ -25,6 +22,10 @@ class FavoritesFragment : Fragment() {
         get() = _binding
             ?: throw IllegalStateException("binding for FavoritesFragment must not be null")
 
+    private val viewModel: FavoritesViewModel by viewModels()
+
+    private lateinit var favoriteListAdapter: RecipeListAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -35,15 +36,43 @@ class FavoritesFragment : Fragment() {
         return binding.root
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initUI()
     }
 
-    private fun getFavorites(): MutableSet<String> {
-        val sharedPrefs =
-            requireContext().getSharedPreferences(PREFS_FAVORITE_RECIPES, Context.MODE_PRIVATE)
-        return HashSet(sharedPrefs.getStringSet(KEY_FAVORITE_RECIPES, emptySet()) ?: emptySet())
+    private fun initUI() {
+        viewModel.loadFavorites()
+        initAdapters()
+        setupObserver()
+    }
+
+    private fun initAdapters() {
+        favoriteListAdapter = RecipeListAdapter(emptyList())
+        binding.rvFavorites.adapter = favoriteListAdapter
+
+        favoriteListAdapter.setOnItemClickListener(object :
+            RecipeListAdapter.OnItemClickListener {
+            override fun onItemClick(recipeId: Int) {
+                openRecipeByRecipeId(recipeId)
+            }
+        })
+    }
+
+    private fun setupObserver() {
+
+        viewModel.favoritesState.observe(viewLifecycleOwner) { state ->
+            favoriteListAdapter.updateRecipes(state.favoritesList)
+
+            if (state.favoritesList.isEmpty()) {
+                binding.rvFavorites.visibility = View.GONE
+                binding.tvTitleFavoritesEmpty.visibility = View.VISIBLE
+            } else {
+                binding.rvFavorites.visibility = View.VISIBLE
+                binding.tvTitleFavoritesEmpty.visibility = View.GONE
+            }
+        }
+
     }
 
     private fun openRecipeByRecipeId(recipeId: Int) {
@@ -55,31 +84,9 @@ class FavoritesFragment : Fragment() {
         }
     }
 
-    private fun initRecycler() {
-        val favoriteIds = getFavorites().mapNotNull { it.toIntOrNull() }.toSet()
-        val favoriteRecipes = STUB.getRecipesByIds(favoriteIds)
-        val favoriteListAdapter = RecipeListAdapter(favoriteRecipes)
-
-        if (favoriteRecipes.isEmpty()) {
-            binding.rvFavorites.visibility = View.GONE
-            binding.tvTitleFavoritesEmpty.visibility = View.VISIBLE
-        } else {
-            binding.rvFavorites.visibility = View.VISIBLE
-            binding.tvTitleFavoritesEmpty.visibility = View.GONE
-        }
-
-        binding.rvFavorites.adapter = favoriteListAdapter
-        favoriteListAdapter.setOnItemClickListener(object :
-            RecipeListAdapter.OnItemClickListener {
-            override fun onItemClick(recipeId: Int) {
-                openRecipeByRecipeId(recipeId)
-            }
-        })
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initRecycler()
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

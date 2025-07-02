@@ -1,5 +1,6 @@
 package ru.eafedorova.recipesapp.ui.categories
 
+import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,10 +9,11 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.eafedorova.recipesapp.R
 import ru.eafedorova.recipesapp.databinding.ItemCategoryBinding
 import ru.eafedorova.recipesapp.model.Category
+import ru.eafedorova.recipesapp.model.Recipe
 import java.io.IOException
 import java.io.InputStream
 
-class CategoriesListAdapter(private val dataSet: List<Category>) :
+class CategoriesListAdapter(private var dataSet: List<Category>) :
     RecyclerView.Adapter<CategoriesListAdapter.ViewHolder>() {
 
     interface OnItemClickListener {
@@ -60,5 +62,11 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
     }
 
     override fun getItemCount() = dataSet.size
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateCategories(dataSet: List<Category>) {
+        this.dataSet = dataSet
+        notifyDataSetChanged()
+    }
 
 }

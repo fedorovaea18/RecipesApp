@@ -34,11 +34,6 @@ class RecipeFragment : Fragment() {
         return binding.root
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val recipeId = arguments?.getInt(ARG_RECIPE_ID) ?: run {
@@ -59,6 +54,7 @@ class RecipeFragment : Fragment() {
     private fun initUI(recipeId: Int) {
 
         viewModel.loadRecipe(recipeId)
+        initAdapters()
         setupObserver()
         setupItemDecoration()
         setupSeekBar()
@@ -98,7 +94,6 @@ class RecipeFragment : Fragment() {
             if (isFavorite) R.drawable.ic_heart else R.drawable.ic_heart_empty
         )
     }
-
 
     private fun setupItemDecoration() {
 
@@ -148,6 +143,11 @@ class RecipeFragment : Fragment() {
         {
             viewModel.onFavoritesClicked()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

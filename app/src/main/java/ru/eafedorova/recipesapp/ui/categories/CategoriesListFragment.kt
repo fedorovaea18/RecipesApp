@@ -8,12 +8,15 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
+import androidx.fragment.app.viewModels
 import ru.eafedorova.recipesapp.Constants.ARG_CATEGORY_ID
 import ru.eafedorova.recipesapp.Constants.ARG_CATEGORY_IMAGE_URL
 import ru.eafedorova.recipesapp.Constants.ARG_CATEGORY_NAME
 import ru.eafedorova.recipesapp.R
 import ru.eafedorova.recipesapp.data.STUB
 import ru.eafedorova.recipesapp.databinding.FragmentListCategoriesBinding
+import ru.eafedorova.recipesapp.ui.recipes.recipesList.RecipeListAdapter
+import ru.eafedorova.recipesapp.ui.recipes.recipesList.RecipeListViewModel
 import ru.eafedorova.recipesapp.ui.recipes.recipesList.RecipesListFragment
 
 class CategoriesListFragment : Fragment() {
@@ -23,6 +26,9 @@ class CategoriesListFragment : Fragment() {
         get() = _binding
             ?: throw IllegalStateException("binding for CategoriesListFragment must not be null")
 
+    private val viewModel: CategoriesListViewModel by viewModels()
+
+    private lateinit var categoriesListAdapter: CategoriesListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -32,20 +38,34 @@ class CategoriesListFragment : Fragment() {
         return binding.root
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initUI()
     }
 
-    private fun initRecycler() {
-        val categoriesAdapter = CategoriesListAdapter(STUB.getCategories())
-        binding.rvCategories.adapter = categoriesAdapter
-        categoriesAdapter.setOnItemClickListener(object :
+    private fun initUI() {
+        viewModel.loadCategories()
+        initAdapters()
+        setupObserver()
+    }
+
+    private fun initAdapters() {
+        categoriesListAdapter = CategoriesListAdapter(emptyList())
+        binding.rvCategories.adapter = categoriesListAdapter
+
+        categoriesListAdapter.setOnItemClickListener(object :
             CategoriesListAdapter.OnItemClickListener {
             override fun onItemClick(categoryId: Int) {
                 openRecipesByCategoryId(categoryId)
             }
         })
+    }
+
+    private fun setupObserver() {
+
+        viewModel.categoriesListState.observe(viewLifecycleOwner) { state ->
+            categoriesListAdapter.updateCategories(state.categoriesList)
+        }
     }
 
     private fun openRecipesByCategoryId(categoryId: Int) {
@@ -63,9 +83,9 @@ class CategoriesListFragment : Fragment() {
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initRecycler()
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

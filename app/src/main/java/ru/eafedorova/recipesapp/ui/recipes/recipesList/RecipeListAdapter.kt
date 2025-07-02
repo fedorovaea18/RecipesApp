@@ -1,5 +1,6 @@
 package ru.eafedorova.recipesapp.ui.recipes.recipesList
 
+import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,7 +12,7 @@ import ru.eafedorova.recipesapp.model.Recipe
 import java.io.IOException
 import java.io.InputStream
 
-class RecipeListAdapter(private val dataSet: List<Recipe>) :
+class RecipeListAdapter(private var dataSet: List<Recipe>) :
     RecyclerView.Adapter<RecipeListAdapter.ViewHolder>() {
 
     interface OnItemClickListener {
@@ -60,5 +61,11 @@ class RecipeListAdapter(private val dataSet: List<Recipe>) :
     }
 
     override fun getItemCount() = dataSet.size
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateRecipes(dataSet: List<Recipe>) {
+        this.dataSet = dataSet
+        notifyDataSetChanged()
+    }
 
 }

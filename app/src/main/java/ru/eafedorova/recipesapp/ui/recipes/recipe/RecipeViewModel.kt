@@ -33,7 +33,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
 
         val drawable = try {
             val inputStream: InputStream? =
-                recipe?.let { getApplication<Application>().applicationContext.assets.open(it.imageUrl) }
+                recipe?.let { getApplication<Application>().assets.open(it.imageUrl) }
             Drawable.createFromStream(inputStream, null)
         } catch (e: IOException) {
             Log.e("RecipeFragment", "Ошибка при загрузке изображения: ${e.message}", e)
@@ -93,6 +93,3 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         _recipeState.value = currentState.copy(portionsCount = newCount)
     }
 }
-
-
-

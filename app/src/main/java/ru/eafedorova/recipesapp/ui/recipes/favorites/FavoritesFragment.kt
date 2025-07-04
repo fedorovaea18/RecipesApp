@@ -6,13 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
-import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import ru.eafedorova.recipesapp.Constants.ARG_RECIPE_ID
 import ru.eafedorova.recipesapp.R
 import ru.eafedorova.recipesapp.databinding.FragmentFavoritesBinding
-import ru.eafedorova.recipesapp.ui.recipes.recipe.RecipeFragment
 import ru.eafedorova.recipesapp.ui.recipes.recipesList.RecipeListAdapter
 
 class FavoritesFragment : Fragment() {
@@ -77,11 +75,7 @@ class FavoritesFragment : Fragment() {
 
     private fun openRecipeByRecipeId(recipeId: Int) {
         val bundle = bundleOf(ARG_RECIPE_ID to recipeId)
-        parentFragmentManager.commit {
-            replace<RecipeFragment>(R.id.mainContainer, args = bundle)
-            setReorderingAllowed(true)
-            addToBackStack(null)
-        }
+        findNavController().navigate(R.id.recipeFragment, bundle)
     }
 
     override fun onDestroyView() {

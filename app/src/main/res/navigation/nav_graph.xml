@@ -23,8 +23,8 @@
         android:label="FavoritesFragment"
         tools:layout="@layout/fragment_favorites">
         <action
-            android:id="@+id/action_favoritesFragment_to_recipesListFragment"
-            app:destination="@id/recipesListFragment" />
+            android:id="@+id/action_favoritesFragment_to_recipeFragment"
+            app:destination="@id/recipeFragment" />
         <action
             android:id="@+id/action_favoritesFragment_to_categoriesListFragment"
             app:destination="@id/categoriesListFragment" />
@@ -37,6 +37,9 @@
         <action
             android:id="@+id/action_recipeFragment_to_favoritesFragment"
             app:destination="@id/favoritesFragment" />
+        <argument
+            android:name="recipeId"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/recipesListFragment"

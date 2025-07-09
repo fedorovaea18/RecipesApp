@@ -4,12 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import ru.eafedorova.recipesapp.Constants.ARG_RECIPE_ID
-import ru.eafedorova.recipesapp.R
 import ru.eafedorova.recipesapp.databinding.FragmentFavoritesBinding
 import ru.eafedorova.recipesapp.ui.recipes.recipesList.RecipeListAdapter
 
@@ -74,8 +71,11 @@ class FavoritesFragment : Fragment() {
     }
 
     private fun openRecipeByRecipeId(recipeId: Int) {
-        val bundle = bundleOf(ARG_RECIPE_ID to recipeId)
-        findNavController().navigate(R.id.recipeFragment, bundle)
+        findNavController().navigate(
+            FavoritesFragmentDirections.actionFavoritesFragmentToRecipeFragment(
+                recipeId
+            )
+        )
     }
 
     override fun onDestroyView() {

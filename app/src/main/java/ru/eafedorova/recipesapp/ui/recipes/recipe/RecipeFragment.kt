@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.divider.MaterialDividerItemDecoration
-import ru.eafedorova.recipesapp.Constants.ARG_RECIPE_ID
 import ru.eafedorova.recipesapp.R
 import ru.eafedorova.recipesapp.databinding.FragmentRecipeBinding
 
@@ -26,6 +26,8 @@ class RecipeFragment : Fragment() {
     private lateinit var ingredientsAdapter: IngredientsAdapter
     private lateinit var methodAdapter: MethodAdapter
 
+    private val args: RecipeFragmentArgs by navArgs()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -36,11 +38,7 @@ class RecipeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val recipeId = arguments?.getInt(ARG_RECIPE_ID) ?: run {
-            binding.tvTitleRecipeName.text = getString(R.string.recipe_not_found)
-            return
-        }
-        initUI(recipeId)
+        initUI(args.recipeId)
     }
 
     private fun initAdapters() {

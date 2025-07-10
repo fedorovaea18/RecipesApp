@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import ru.eafedorova.recipesapp.Constants.ARG_CATEGORY_ID
 import ru.eafedorova.recipesapp.Constants.ARG_CATEGORY_IMAGE_URL
 import ru.eafedorova.recipesapp.Constants.ARG_CATEGORY_NAME
@@ -23,6 +24,8 @@ class RecipesListFragment : Fragment() {
 
     private lateinit var recipeListAdapter: RecipeListAdapter
 
+    private val args: RecipesListFragmentArgs by navArgs()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -35,12 +38,9 @@ class RecipesListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val categoryId = arguments?.getInt(ARG_CATEGORY_ID) ?: 0
-        val categoryName = arguments?.getString(ARG_CATEGORY_NAME)
-        val categoryImageUrl =
-            arguments?.getString(ARG_CATEGORY_IMAGE_URL)
+        val category = args.category
 
-        initUI(categoryId, categoryName, categoryImageUrl)
+        initUI(category.id, category.title, category.imageUrl)
     }
 
     private fun initUI(categoryId: Int, categoryName: String?, categoryImageUrl: String?) {

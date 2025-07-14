@@ -8,10 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import ru.eafedorova.recipesapp.Constants.ARG_CATEGORY_ID
-import ru.eafedorova.recipesapp.Constants.ARG_CATEGORY_IMAGE_URL
-import ru.eafedorova.recipesapp.Constants.ARG_CATEGORY_NAME
 import ru.eafedorova.recipesapp.databinding.FragmentListRecipesBinding
+import ru.eafedorova.recipesapp.model.Category
 
 class RecipesListFragment : Fragment() {
 
@@ -40,11 +38,11 @@ class RecipesListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val category = args.category
 
-        initUI(category.id, category.title, category.imageUrl)
+        initUI(category)
     }
 
-    private fun initUI(categoryId: Int, categoryName: String?, categoryImageUrl: String?) {
-        viewModel.loadRecipeList(categoryId, categoryName, categoryImageUrl)
+    private fun initUI(category: Category) {
+        viewModel.loadRecipeList(category)
         initAdapters()
         setupObserver()
     }

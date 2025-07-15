@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import ru.eafedorova.recipesapp.data.STUB
+import ru.eafedorova.recipesapp.model.Category
 import ru.eafedorova.recipesapp.model.Recipe
 import java.io.IOException
 import java.io.InputStream
@@ -21,11 +22,11 @@ class RecipeListViewModel(application: Application) : AndroidViewModel(applicati
     private val _recipeListState = MutableLiveData(RecipeListState())
     val recipeListState: LiveData<RecipeListState> get() = _recipeListState
 
-    fun loadRecipeList(categoryId: Int, categoryName: String?, categoryImageUrl: String?) {
-        val recipesList = STUB.getRecipesByCategoryId(categoryId)
+    fun loadRecipeList(category: Category) {
+        val recipesList = STUB.getRecipesByCategoryId(category.id)
 
         val drawable = try {
-            val inputStream: InputStream? = categoryImageUrl?.let {
+            val inputStream: InputStream = category.imageUrl.let {
                 getApplication<Application>().assets.open(it)
             }
             Drawable.createFromStream(inputStream, null)
@@ -35,7 +36,7 @@ class RecipeListViewModel(application: Application) : AndroidViewModel(applicati
         }
 
         _recipeListState.value = recipeListState.value?.copy(
-            categoryName = categoryName, categoryImage = drawable, recipesList = recipesList
+            categoryName = category.title, categoryImage = drawable, recipesList = recipesList
 
         )
     }

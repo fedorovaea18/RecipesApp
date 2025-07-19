@@ -5,12 +5,14 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import kotlinx.serialization.json.Json
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.logging.HttpLoggingInterceptor
 import ru.eafedorova.recipesapp.databinding.ActivityMainBinding
 import ru.eafedorova.recipesapp.model.Category
 import ru.eafedorova.recipesapp.model.Recipe
-import java.net.HttpURLConnection
-import java.net.URL
 import java.util.concurrent.Executors
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,41 +29,50 @@ class MainActivity : AppCompatActivity() {
         Log.d("!!!", "Метод onCreate выполняется на потоке: ${Thread.currentThread().name}")
 
         val thread = Thread {
-            val url = URL("https://recipes.androidsprint.ru/api/category")
-            val connection = url.openConnection() as HttpURLConnection
-            connection.connect()
 
-            val responseBody = connection.inputStream.bufferedReader().readText()
-            val categoriesList = Json.decodeFromString<List<Category>>(responseBody)
+            val loggingInterceptor = HttpLoggingInterceptor()
+                .setLevel(HttpLoggingInterceptor.Level.BASIC)
 
-            Log.d("!!!", "responseCode: ${connection.responseCode}")
-            Log.d("!!!", "responseMessage: ${connection.responseMessage}")
-            Log.d("!!!", "Body: $responseBody")
-            Log.d("!!!", "Выполняю запрос на потоке: ${Thread.currentThread().name}")
-            Log.d("!!!", "Список категорий: $categoriesList")
+            val client = OkHttpClient.Builder()
+                .addInterceptor(loggingInterceptor)
+                .build()
 
-            val categoryIds = categoriesList.map { it.id }
+            val request = Request.Builder()
+                .url("https://recipes.androidsprint.ru/api/category")
+                .build()
 
-            categoryIds.forEach { categoryId ->
-                threadPool.execute {
+            client.newCall(request).execute().use { response ->
+                val responseBody = response.body?.string() ?: ""
+                val categoriesList = Json.decodeFromString<List<Category>>(responseBody)
 
-                    val categoryRecipesUrl =
-                        URL("https://recipes.androidsprint.ru/api/category/$categoryId/recipes")
-                    val categoryRecipesConnection =
-                        categoryRecipesUrl.openConnection() as HttpURLConnection
-                    categoryRecipesConnection.connect()
+                Log.d("!!!", "responseCode: ${response.code}")
+                Log.d("!!!", "responseMessage: ${response.message}")
+                Log.d("!!!", "Body: $responseBody")
+                Log.d("!!!", "Выполняю запрос на потоке: ${Thread.currentThread().name}")
+                Log.d("!!!", "Список категорий: $categoriesList")
 
-                    val categoryRecipesResponse =
-                        categoryRecipesConnection.inputStream.bufferedReader().readText()
-                    val categoryRecipesList =
-                        Json.decodeFromString<List<Recipe>>(categoryRecipesResponse)
 
-                    Log.d("!!!", "Рецепты для категории $categoryId: $categoryRecipesList")
+                categoriesList.forEach { category ->
+                    threadPool.execute {
 
+                        val categoryRecipesRequest = Request.Builder()
+                            .url("https://recipes.androidsprint.ru/api/category/${category.id}/recipes")
+                            .build()
+
+                        client.newCall(categoryRecipesRequest).execute().use { response ->
+                            val categoryRecipesResponse = response.body?.string() ?: ""
+                            val categoryRecipesList =
+                                Json.decodeFromString<List<Recipe>>(categoryRecipesResponse)
+
+                            Log.d(
+                                "!!!",
+                                "Рецепты для категории ${category.title}: $categoryRecipesList"
+                            )
+                        }
+
+                    }
                 }
-
             }
-
         }
         thread.start()
 

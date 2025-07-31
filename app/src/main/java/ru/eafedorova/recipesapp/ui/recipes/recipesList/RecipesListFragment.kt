@@ -51,6 +51,7 @@ class RecipesListFragment : Fragment() {
         recipeListAdapter = RecipeListAdapter(emptyList())
         binding.rvRecipes.adapter = recipeListAdapter
 
+
         recipeListAdapter.setOnItemClickListener(object :
             RecipeListAdapter.OnItemClickListener {
             override fun onItemClick(recipeId: Int) {
@@ -70,6 +71,7 @@ class RecipesListFragment : Fragment() {
     }
 
     private fun openRecipeByRecipeId(recipeId: Int) {
+
         findNavController().navigate(
             RecipesListFragmentDirections.actionRecipesListFragmentToRecipeFragment(
                 recipeId

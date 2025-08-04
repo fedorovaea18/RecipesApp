@@ -3,14 +3,10 @@ package ru.eafedorova.recipesapp.ui.recipes.recipe
 import android.app.Application
 import android.content.Context
 import android.graphics.drawable.Drawable
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.application
 import ru.eafedorova.recipesapp.Constants.KEY_FAVORITE_RECIPES
 import ru.eafedorova.recipesapp.Constants.PREFS_FAVORITE_RECIPES
 import ru.eafedorova.recipesapp.R
@@ -25,6 +21,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         val isFavorite: Boolean = false,
         val portionsCount: Int = 1,
         val recipeImage: Drawable? = null,
+        val errorResId: Int? = null,
     )
 
     private val threadPool = Executors.newFixedThreadPool(10)
@@ -65,16 +62,19 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
                             isFavorite = isFavorite,
                             portionsCount = 1,
                             recipeImage = drawable,
+                            errorResId = null,
                         )
                     )
                 } else {
-                    Handler(Looper.getMainLooper()).post {
-                        Toast.makeText(
-                            application.applicationContext,
-                            R.string.network_error,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
+                    _recipeState.postValue(
+                        RecipeState(
+                            recipe = null,
+                            isFavorite = false,
+                            portionsCount = 1,
+                            recipeImage = null,
+                            errorResId = R.string.network_error,
+                        )
+                    )
                 }
             }
         }

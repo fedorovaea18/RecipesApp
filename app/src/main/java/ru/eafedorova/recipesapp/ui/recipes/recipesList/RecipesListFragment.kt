@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import ru.eafedorova.recipesapp.R
 import ru.eafedorova.recipesapp.databinding.FragmentListRecipesBinding
 import ru.eafedorova.recipesapp.model.Category
 
@@ -51,6 +53,7 @@ class RecipesListFragment : Fragment() {
         recipeListAdapter = RecipeListAdapter(emptyList())
         binding.rvRecipes.adapter = recipeListAdapter
 
+
         recipeListAdapter.setOnItemClickListener(object :
             RecipeListAdapter.OnItemClickListener {
             override fun onItemClick(recipeId: Int) {
@@ -66,10 +69,16 @@ class RecipesListFragment : Fragment() {
             binding.ivImageCategoryRecipe.setImageDrawable(state.categoryImage)
 
             recipeListAdapter.updateRecipes(state.recipesList)
+
+            state.errorResId?.let { message ->
+                Toast.makeText(requireContext(), R.string.network_error, Toast.LENGTH_SHORT).show()
+            }
+
         }
     }
 
     private fun openRecipeByRecipeId(recipeId: Int) {
+
         findNavController().navigate(
             RecipesListFragmentDirections.actionRecipesListFragmentToRecipeFragment(
                 recipeId

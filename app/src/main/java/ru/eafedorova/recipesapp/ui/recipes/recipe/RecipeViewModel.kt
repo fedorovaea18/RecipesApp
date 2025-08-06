@@ -9,10 +9,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import ru.eafedorova.recipesapp.Constants.KEY_FAVORITE_RECIPES
 import ru.eafedorova.recipesapp.Constants.PREFS_FAVORITE_RECIPES
-import ru.eafedorova.recipesapp.data.STUB
+import ru.eafedorova.recipesapp.R
+import ru.eafedorova.recipesapp.data.RecipesRepository
 import ru.eafedorova.recipesapp.model.Recipe
 import java.io.IOException
-import java.io.InputStream
+import java.util.concurrent.Executors
 
 class RecipeViewModel(application: Application) : AndroidViewModel(application) {
     data class RecipeState(
@@ -20,32 +21,64 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         val isFavorite: Boolean = false,
         val portionsCount: Int = 1,
         val recipeImage: Drawable? = null,
+        val errorResId: Int? = null,
     )
+
+    private val threadPool = Executors.newFixedThreadPool(10)
+
+    private val recipesRepository = RecipesRepository()
 
     private val _recipeState = MutableLiveData(RecipeState())
     val recipeState: LiveData<RecipeState> get() = _recipeState
 
-    fun loadRecipe(recipeId: Int) {
-        // TODO("Load from network")
-        val recipe = STUB.getRecipeById(recipeId)
-        val favoriteSet = getFavorites()
-        val isFavorite = favoriteSet.contains(recipeId.toString())
-
-        val drawable = try {
-            val inputStream: InputStream? =
-                recipe?.let { getApplication<Application>().assets.open(it.imageUrl) }
-            Drawable.createFromStream(inputStream, null)
+    private fun loadDrawableFromAssets(imageUrl: String?): Drawable? {
+        return try {
+            imageUrl?.let {
+                getApplication<Application>().assets.open(it).use { inputStream ->
+                    Drawable.createFromStream(inputStream, null)
+                }
+            }
         } catch (e: IOException) {
             Log.e("RecipeFragment", "Ошибка при загрузке изображения: ${e.message}", e)
             null
         }
+    }
 
-        _recipeState.value = recipeState.value?.copy(
-            recipe = recipe,
-            isFavorite = isFavorite,
-            portionsCount = 1,
-            recipeImage = drawable,
-        )
+    fun loadRecipe(recipeId: Int) {
+
+        threadPool.execute {
+
+            recipesRepository.getRecipeById(recipeId) { recipe ->
+
+                val favoriteSet = getFavorites()
+                val isFavorite = favoriteSet.contains(recipeId.toString())
+
+                val drawable = loadDrawableFromAssets(recipe?.imageUrl)
+
+                if (recipe != null) {
+                    _recipeState.postValue(
+                        RecipeState(
+                            recipe = recipe,
+                            isFavorite = isFavorite,
+                            portionsCount = 1,
+                            recipeImage = drawable,
+                            errorResId = null,
+                        )
+                    )
+                } else {
+                    _recipeState.postValue(
+                        RecipeState(
+                            recipe = null,
+                            isFavorite = false,
+                            portionsCount = 1,
+                            recipeImage = null,
+                            errorResId = R.string.network_error,
+                        )
+                    )
+                }
+            }
+        }
+
     }
 
     private fun getFavorites(): MutableSet<String> {

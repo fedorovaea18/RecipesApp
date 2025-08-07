@@ -2,17 +2,15 @@ package ru.eafedorova.recipesapp.ui.recipes.recipe
 
 import android.app.Application
 import android.content.Context
-import android.graphics.drawable.Drawable
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import ru.eafedorova.recipesapp.Constants.IMAGE_URL
 import ru.eafedorova.recipesapp.Constants.KEY_FAVORITE_RECIPES
 import ru.eafedorova.recipesapp.Constants.PREFS_FAVORITE_RECIPES
 import ru.eafedorova.recipesapp.R
 import ru.eafedorova.recipesapp.data.RecipesRepository
 import ru.eafedorova.recipesapp.model.Recipe
-import java.io.IOException
 import java.util.concurrent.Executors
 
 class RecipeViewModel(application: Application) : AndroidViewModel(application) {
@@ -20,7 +18,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         val recipe: Recipe? = null,
         val isFavorite: Boolean = false,
         val portionsCount: Int = 1,
-        val recipeImage: Drawable? = null,
+        val recipeImageUrl: String? = null,
         val errorResId: Int? = null,
     )
 
@@ -31,19 +29,6 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     private val _recipeState = MutableLiveData(RecipeState())
     val recipeState: LiveData<RecipeState> get() = _recipeState
 
-    private fun loadDrawableFromAssets(imageUrl: String?): Drawable? {
-        return try {
-            imageUrl?.let {
-                getApplication<Application>().assets.open(it).use { inputStream ->
-                    Drawable.createFromStream(inputStream, null)
-                }
-            }
-        } catch (e: IOException) {
-            Log.e("RecipeFragment", "Ошибка при загрузке изображения: ${e.message}", e)
-            null
-        }
-    }
-
     fun loadRecipe(recipeId: Int) {
 
         threadPool.execute {
@@ -53,7 +38,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
                 val favoriteSet = getFavorites()
                 val isFavorite = favoriteSet.contains(recipeId.toString())
 
-                val drawable = loadDrawableFromAssets(recipe?.imageUrl)
+                val drawable = IMAGE_URL + recipe?.imageUrl
 
                 if (recipe != null) {
                     _recipeState.postValue(
@@ -61,7 +46,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
                             recipe = recipe,
                             isFavorite = isFavorite,
                             portionsCount = 1,
-                            recipeImage = drawable,
+                            recipeImageUrl = drawable,
                             errorResId = null,
                         )
                     )
@@ -71,7 +56,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
                             recipe = null,
                             isFavorite = false,
                             portionsCount = 1,
-                            recipeImage = null,
+                            recipeImageUrl = null,
                             errorResId = R.string.network_error,
                         )
                     )

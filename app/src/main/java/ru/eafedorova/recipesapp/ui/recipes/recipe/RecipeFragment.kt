@@ -1,6 +1,5 @@
 package ru.eafedorova.recipesapp.ui.recipes.recipe
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import ru.eafedorova.recipesapp.R
 import ru.eafedorova.recipesapp.databinding.FragmentRecipeBinding
@@ -67,7 +67,9 @@ class RecipeFragment : Fragment() {
 
             state.recipe?.let { recipe ->
                 updateRecipeTitle(recipe.title)
-                updateRecipeImage(state.recipeImage)
+
+                loadImage(state)
+
                 updateFavoriteIcon(state.isFavorite)
 
                 binding.tvPortionsCount.text = state.portionsCount.toString()
@@ -85,12 +87,18 @@ class RecipeFragment : Fragment() {
         }
     }
 
-    private fun updateRecipeTitle(title: String) {
-        binding.tvTitleRecipeName.text = title
+    private fun loadImage(state: RecipeViewModel.RecipeState) {
+        Glide
+            .with(this)
+            .load(state.recipeImageUrl)
+            .placeholder(R.drawable.img_placeholder)
+            .error(R.drawable.img_error)
+            .into(binding.ivImageRecipe)
+
     }
 
-    private fun updateRecipeImage(drawable: Drawable?) {
-        binding.ivImageRecipe.setImageDrawable(drawable)
+    private fun updateRecipeTitle(title: String) {
+        binding.tvTitleRecipeName.text = title
     }
 
     private fun updateFavoriteIcon(isFavorite: Boolean) {

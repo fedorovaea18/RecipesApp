@@ -5,20 +5,19 @@ import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import ru.eafedorova.recipesapp.Constants.KEY_FAVORITE_RECIPES
 import ru.eafedorova.recipesapp.Constants.PREFS_FAVORITE_RECIPES
 import ru.eafedorova.recipesapp.R
 import ru.eafedorova.recipesapp.data.RecipesRepository
 import ru.eafedorova.recipesapp.model.Recipe
-import java.util.concurrent.Executors
 
 class FavoritesViewModel(application: Application) : AndroidViewModel(application) {
     data class FavoritesState(
         val favoritesList: List<Recipe> = emptyList(),
         val errorResId: Int? = null,
     )
-
-    private val threadPool = Executors.newFixedThreadPool(10)
 
     private val recipesRepository = RecipesRepository()
 
@@ -27,7 +26,7 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun loadFavorites() {
 
-        threadPool.execute {
+        viewModelScope.launch {
 
             val favoriteIds = getFavorites().mapNotNull { it.toIntOrNull() }.toSet()
 

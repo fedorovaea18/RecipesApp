@@ -4,18 +4,17 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import ru.eafedorova.recipesapp.R
 import ru.eafedorova.recipesapp.data.RecipesRepository
 import ru.eafedorova.recipesapp.model.Category
-import java.util.concurrent.Executors
 
 class CategoriesListViewModel(application: Application) : AndroidViewModel(application) {
     data class CategoriesListState(
         val categoriesList: List<Category> = emptyList(),
         val errorResId: Int? = null,
     )
-
-    private val threadPool = Executors.newFixedThreadPool(10)
 
     private val recipesRepository = RecipesRepository()
 
@@ -24,28 +23,26 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
 
     fun loadCategories() {
 
-        threadPool.execute {
+        viewModelScope.launch {
 
-            recipesRepository.getCategories { categoriesList ->
+            val categoriesList = recipesRepository.getCategories()
 
-                if (categoriesList != null) {
-                    _categoriesListState.postValue(
-                        CategoriesListState(
-                            categoriesList = categoriesList,
-                            errorResId = null,
-                        )
+            if (categoriesList != null) {
+                _categoriesListState.postValue(
+                    CategoriesListState(
+                        categoriesList = categoriesList,
+                        errorResId = null,
                     )
-                } else {
-                    _categoriesListState.postValue(
-                        CategoriesListState(
-                            categoriesList = emptyList(),
-                            errorResId = R.string.network_error,
-                        )
+                )
+            } else {
+                _categoriesListState.postValue(
+                    CategoriesListState(
+                        categoriesList = emptyList(),
+                        errorResId = R.string.network_error,
                     )
-                }
-
+                )
             }
+
         }
     }
-
 }

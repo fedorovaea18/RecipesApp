@@ -1,16 +1,14 @@
 package ru.eafedorova.recipesapp.ui.recipes.recipesList
 
 import android.annotation.SuppressLint
-import android.graphics.drawable.Drawable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import ru.eafedorova.recipesapp.Constants
 import ru.eafedorova.recipesapp.R
 import ru.eafedorova.recipesapp.databinding.ItemRecipeBinding
 import ru.eafedorova.recipesapp.model.Recipe
-import java.io.IOException
-import java.io.InputStream
 
 class RecipeListAdapter(private var dataSet: List<Recipe>) :
     RecyclerView.Adapter<RecipeListAdapter.ViewHolder>() {
@@ -32,15 +30,12 @@ class RecipeListAdapter(private var dataSet: List<Recipe>) :
                 R.string.image_description_category, recipe.title
             )
 
-            val drawable = try {
-                val inputStream: InputStream? =
-                    binding.root.context?.assets?.open(recipe.imageUrl)
-                Drawable.createFromStream(inputStream, null)
-            } catch (e: IOException) {
-                Log.e("RecipeListAdapter", "Ошибка при загрузке изображения: ${e.message}", e)
-                null
-            }
-            binding.ivImageRecipe.setImageDrawable(drawable)
+            Glide
+                .with(binding.root)
+                .load(Constants.IMAGE_URL + recipe.imageUrl)
+                .placeholder(R.drawable.img_placeholder)
+                .error(R.drawable.img_error)
+                .into(binding.ivImageRecipe)
         }
 
     }

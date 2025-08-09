@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 import ru.eafedorova.recipesapp.R
 import ru.eafedorova.recipesapp.databinding.FragmentListRecipesBinding
 import ru.eafedorova.recipesapp.model.Category
@@ -66,7 +67,7 @@ class RecipesListFragment : Fragment() {
 
         viewModel.recipeListState.observe(viewLifecycleOwner) { state ->
             binding.tvTitleCategoryRecipe.text = state.categoryName
-            binding.ivImageCategoryRecipe.setImageDrawable(state.categoryImage)
+            loadImage(state)
 
             recipeListAdapter.updateRecipes(state.recipesList)
 
@@ -75,6 +76,16 @@ class RecipesListFragment : Fragment() {
             }
 
         }
+    }
+
+    private fun loadImage(state: RecipeListViewModel.RecipeListState) {
+        Glide
+            .with(this)
+            .load(state.categoryImageUrl)
+            .placeholder(R.drawable.img_placeholder)
+            .error(R.drawable.img_error)
+            .into(binding.ivImageCategoryRecipe)
+
     }
 
     private fun openRecipeByRecipeId(recipeId: Int) {

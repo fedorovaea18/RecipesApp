@@ -1,16 +1,14 @@
 package ru.eafedorova.recipesapp.ui.categories
 
 import android.annotation.SuppressLint
-import android.graphics.drawable.Drawable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import ru.eafedorova.recipesapp.Constants
 import ru.eafedorova.recipesapp.R
 import ru.eafedorova.recipesapp.databinding.ItemCategoryBinding
 import ru.eafedorova.recipesapp.model.Category
-import java.io.IOException
-import java.io.InputStream
 
 class CategoriesListAdapter(private var dataSet: List<Category>) :
     RecyclerView.Adapter<CategoriesListAdapter.ViewHolder>() {
@@ -33,15 +31,13 @@ class CategoriesListAdapter(private var dataSet: List<Category>) :
                 R.string.image_description_category, category.title
             )
 
-            val drawable = try {
-                val inputStream: InputStream? =
-                    binding.root.context?.assets?.open(category.imageUrl)
-                Drawable.createFromStream(inputStream, null)
-            } catch (e: IOException) {
-                Log.e("CategoriesListAdapter", "Ошибка при загрузке изображения: ${e.message}", e)
-                null
-            }
-            binding.ivImageCategory.setImageDrawable(drawable)
+            Glide
+                .with(binding.root)
+                .load(Constants.IMAGE_URL + category.imageUrl)
+                .placeholder(R.drawable.img_placeholder)
+                .error(R.drawable.img_error)
+                .into(binding.ivImageCategory)
+
         }
 
     }

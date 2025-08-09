@@ -25,26 +25,24 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
 
         viewModelScope.launch {
 
-            recipesRepository.getCategories { categoriesList ->
+            val categoriesList = recipesRepository.getCategories()
 
-                if (categoriesList != null) {
-                    _categoriesListState.postValue(
-                        CategoriesListState(
-                            categoriesList = categoriesList,
-                            errorResId = null,
-                        )
+            if (categoriesList != null) {
+                _categoriesListState.postValue(
+                    CategoriesListState(
+                        categoriesList = categoriesList,
+                        errorResId = null,
                     )
-                } else {
-                    _categoriesListState.postValue(
-                        CategoriesListState(
-                            categoriesList = emptyList(),
-                            errorResId = R.string.network_error,
-                        )
+                )
+            } else {
+                _categoriesListState.postValue(
+                    CategoriesListState(
+                        categoriesList = emptyList(),
+                        errorResId = R.string.network_error,
                     )
-                }
-
+                )
             }
+
         }
     }
-
 }

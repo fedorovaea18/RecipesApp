@@ -32,14 +32,12 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
 
         viewModelScope.launch {
 
-            recipesRepository.getRecipeById(recipeId) { recipe ->
-
-                val favoriteSet = getFavorites()
-                val isFavorite = favoriteSet.contains(recipeId.toString())
-
-                val drawable = IMAGE_URL + recipe?.imageUrl
+            val recipe = recipesRepository.getRecipeById(recipeId)
+            val favoriteSet = getFavorites()
+            val isFavorite = favoriteSet.contains(recipeId.toString())
 
                 if (recipe != null) {
+                    val drawable = IMAGE_URL + recipe.imageUrl
                     _recipeState.postValue(
                         RecipeState(
                             recipe = recipe,
@@ -63,7 +61,6 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
             }
         }
 
-    }
 
     private fun getFavorites(): MutableSet<String> {
         val sharedPrefs =

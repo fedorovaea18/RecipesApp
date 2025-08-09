@@ -20,65 +20,60 @@ class RecipesRepository {
 
     private var service: RecipeApiService = retrofit.create(RecipeApiService::class.java)
 
-    suspend fun getCategories(callback: (List<Category>?) -> Unit) {
-        withContext(Dispatchers.IO) {
-            val categoriesList = try {
+    suspend fun getCategories(): List<Category>? {
+        return withContext(Dispatchers.IO) {
+            try {
                 val response = service.getCategories().execute()
                 if (response.isSuccessful) response.body() else null
             } catch (e: Exception) {
                 null
             }
-            callback(categoriesList)
         }
     }
 
-    suspend fun getCategoryById(categoryId: Int, callback: (Category?) -> Unit) {
-        withContext(Dispatchers.IO) {
-            val category = try {
+    suspend fun getCategoryById(categoryId: Int): Category? {
+        return withContext(Dispatchers.IO) {
+            try {
                 val response = service.getCategoryById(categoryId).execute()
                 if (response.isSuccessful) response.body() else null
             } catch (e: Exception) {
                 null
             }
-            callback(category)
         }
     }
 
-    suspend fun getRecipesByCategoryId(categoryId: Int, callback: (List<Recipe>?) -> Unit) {
-        withContext(Dispatchers.IO) {
-            val recipes = try {
+    suspend fun getRecipesByCategoryId(categoryId: Int): List<Recipe>? {
+        return withContext(Dispatchers.IO) {
+            try {
                 val response = service.getRecipesByCategoryId(categoryId).execute()
                 if (response.isSuccessful) response.body() else null
             } catch (e: Exception) {
                 null
             }
-            callback(recipes)
         }
     }
 
 
-    suspend fun getRecipeById(recipeId: Int, callback: (Recipe?) -> Unit) {
-        withContext(Dispatchers.IO) {
-            val recipe = try {
+    suspend fun getRecipeById(recipeId: Int): Recipe? {
+        return withContext(Dispatchers.IO) {
+            try {
                 val response = service.getRecipeById(recipeId).execute()
                 if (response.isSuccessful) response.body() else null
             } catch (e: Exception) {
                 null
             }
-            callback(recipe)
         }
     }
 
-    suspend fun getRecipesByIds(recipeIds: Set<Int>, callback: (List<Recipe>?) -> Unit) {
-        withContext(Dispatchers.IO) {
-            val recipes = try {
+    suspend fun getRecipesByIds(recipeIds: Set<Int>): List<Recipe>? {
+        return withContext(Dispatchers.IO) {
+            try {
                 val idsString = recipeIds.joinToString(",")
                 val response = service.getRecipesByIds(idsString).execute()
                 if (response.isSuccessful) response.body() else null
             } catch (e: Exception) {
                 null
             }
-            callback(recipes)
         }
     }
 

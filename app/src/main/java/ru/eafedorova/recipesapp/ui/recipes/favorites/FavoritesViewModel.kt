@@ -28,9 +28,10 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
 
         viewModelScope.launch {
 
+
             val favoriteIds = getFavorites().mapNotNull { it.toIntOrNull() }.toSet()
 
-            recipesRepository.getRecipesByIds(favoriteIds) { favoriteRecipes ->
+            val favoriteRecipes = recipesRepository.getRecipesByIds(favoriteIds)
 
                 if (favoriteRecipes != null) {
                     _favoritesState.postValue(
@@ -49,7 +50,6 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
                 }
             }
         }
-    }
 
     private fun getFavorites(): MutableSet<String> {
         val sharedPrefs =

@@ -26,14 +26,14 @@ class RecipeListViewModel(application: Application) : AndroidViewModel(applicati
     val recipeListState: LiveData<RecipeListState> get() = _recipeListState
 
     fun loadRecipeList(category: Category) {
-
         viewModelScope.launch {
+
+            val recipesList = recipesRepository.getRecipesByCategoryId(category.id)
 
             val drawable = IMAGE_URL + category.imageUrl
 
-            recipesRepository.getRecipesByCategoryId(category.id) { recipesList ->
-
                 if (recipesList != null) {
+                    val drawable = IMAGE_URL + category.imageUrl
                     _recipeListState.postValue(
                         RecipeListState(
                             categoryName = category.title,
@@ -52,8 +52,6 @@ class RecipeListViewModel(application: Application) : AndroidViewModel(applicati
                         )
                     )
                 }
-            }
         }
     }
-
 }

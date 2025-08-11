@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.eafedorova.recipesapp.R
 import ru.eafedorova.recipesapp.data.RecipesRepository
+import ru.eafedorova.recipesapp.data.ResponseResult
 import ru.eafedorova.recipesapp.model.Category
 
 class CategoriesListViewModel(application: Application) : AndroidViewModel(application) {
@@ -25,24 +26,29 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
 
         viewModelScope.launch {
 
-            val categoriesList = recipesRepository.getCategories()
+            val categoriesResult = recipesRepository.getCategories()
 
-            if (categoriesList != null) {
-                _categoriesListState.postValue(
-                    CategoriesListState(
-                        categoriesList = categoriesList,
-                        errorResId = null,
+            when (categoriesResult) {
+                is ResponseResult.Success -> {
+                    _categoriesListState.postValue(
+                        CategoriesListState(
+                            categoriesList = categoriesResult.data,
+                            errorResId = null,
+                        )
                     )
-                )
-            } else {
-                _categoriesListState.postValue(
-                    CategoriesListState(
-                        categoriesList = emptyList(),
-                        errorResId = R.string.network_error,
+                }
+                else -> {
+                    _categoriesListState.postValue(
+                        CategoriesListState(
+                            categoriesList = emptyList(),
+                            errorResId = R.string.network_error,
+                        )
                     )
-                )
+                }
             }
 
         }
+
     }
+
 }

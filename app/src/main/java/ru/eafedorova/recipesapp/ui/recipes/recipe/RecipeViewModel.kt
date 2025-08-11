@@ -12,6 +12,7 @@ import ru.eafedorova.recipesapp.Constants.KEY_FAVORITE_RECIPES
 import ru.eafedorova.recipesapp.Constants.PREFS_FAVORITE_RECIPES
 import ru.eafedorova.recipesapp.R
 import ru.eafedorova.recipesapp.data.RecipesRepository
+import ru.eafedorova.recipesapp.data.ResponseResult
 import ru.eafedorova.recipesapp.model.Recipe
 
 class RecipeViewModel(application: Application) : AndroidViewModel(application) {
@@ -32,22 +33,24 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
 
         viewModelScope.launch {
 
-            val recipe = recipesRepository.getRecipeById(recipeId)
+            val recipeResult = recipesRepository.getRecipeById(recipeId)
             val favoriteSet = getFavorites()
             val isFavorite = favoriteSet.contains(recipeId.toString())
 
-                if (recipe != null) {
-                    val drawable = IMAGE_URL + recipe.imageUrl
+            when (recipeResult) {
+                is ResponseResult.Success -> {
+                    val drawable = IMAGE_URL + recipeResult.data.imageUrl
                     _recipeState.postValue(
                         RecipeState(
-                            recipe = recipe,
+                            recipe = recipeResult.data,
                             isFavorite = isFavorite,
                             portionsCount = 1,
                             recipeImageUrl = drawable,
                             errorResId = null,
                         )
                     )
-                } else {
+                }
+                else -> {
                     _recipeState.postValue(
                         RecipeState(
                             recipe = null,
@@ -59,8 +62,10 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
                     )
                 }
             }
+
         }
 
+    }
 
     private fun getFavorites(): MutableSet<String> {
         val sharedPrefs =

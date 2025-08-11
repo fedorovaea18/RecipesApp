@@ -7,6 +7,7 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
 import ru.eafedorova.recipesapp.Constants.BASE_URL
+import ru.eafedorova.recipesapp.R
 import ru.eafedorova.recipesapp.model.Category
 import ru.eafedorova.recipesapp.model.Recipe
 
@@ -20,59 +21,59 @@ class RecipesRepository {
 
     private var service: RecipeApiService = retrofit.create(RecipeApiService::class.java)
 
-    suspend fun getCategories(): List<Category>? {
+    suspend fun getCategories(): ResponseResult<List<Category>>? {
         return withContext(Dispatchers.IO) {
             try {
-                val response = service.getCategories().execute()
-                if (response.isSuccessful) response.body() else null
+                val response = service.getCategories()
+                ResponseResult.Success(response)
             } catch (e: Exception) {
-                null
+                ResponseResult.Error(R.string.network_error)
             }
         }
     }
 
-    suspend fun getCategoryById(categoryId: Int): Category? {
+    suspend fun getCategoryById(categoryId: Int): ResponseResult<Category>? {
         return withContext(Dispatchers.IO) {
             try {
-                val response = service.getCategoryById(categoryId).execute()
-                if (response.isSuccessful) response.body() else null
+                val response = service.getCategoryById(categoryId)
+                ResponseResult.Success(response)
             } catch (e: Exception) {
-                null
+                ResponseResult.Error(R.string.network_error)
             }
         }
     }
 
-    suspend fun getRecipesByCategoryId(categoryId: Int): List<Recipe>? {
+    suspend fun getRecipesByCategoryId(categoryId: Int): ResponseResult<List<Recipe>>? {
         return withContext(Dispatchers.IO) {
             try {
-                val response = service.getRecipesByCategoryId(categoryId).execute()
-                if (response.isSuccessful) response.body() else null
+                val response = service.getRecipesByCategoryId(categoryId)
+                ResponseResult.Success(response)
             } catch (e: Exception) {
-                null
+                ResponseResult.Error(R.string.network_error)
             }
         }
     }
 
 
-    suspend fun getRecipeById(recipeId: Int): Recipe? {
+    suspend fun getRecipeById(recipeId: Int): ResponseResult<Recipe>? {
         return withContext(Dispatchers.IO) {
             try {
-                val response = service.getRecipeById(recipeId).execute()
-                if (response.isSuccessful) response.body() else null
+                val response = service.getRecipeById(recipeId)
+                ResponseResult.Success(response)
             } catch (e: Exception) {
-                null
+                ResponseResult.Error(R.string.network_error)
             }
         }
     }
 
-    suspend fun getRecipesByIds(recipeIds: Set<Int>): List<Recipe>? {
+    suspend fun getRecipesByIds(recipeIds: Set<Int>): ResponseResult<List<Recipe>>? {
         return withContext(Dispatchers.IO) {
             try {
                 val idsString = recipeIds.joinToString(",")
-                val response = service.getRecipesByIds(idsString).execute()
-                if (response.isSuccessful) response.body() else null
+                val response = service.getRecipesByIds(idsString)
+                ResponseResult.Success(response)
             } catch (e: Exception) {
-                null
+                ResponseResult.Error(R.string.network_error)
             }
         }
     }

@@ -11,6 +11,7 @@ import ru.eafedorova.recipesapp.Constants.KEY_FAVORITE_RECIPES
 import ru.eafedorova.recipesapp.Constants.PREFS_FAVORITE_RECIPES
 import ru.eafedorova.recipesapp.R
 import ru.eafedorova.recipesapp.data.RecipesRepository
+import ru.eafedorova.recipesapp.data.ResponseResult
 import ru.eafedorova.recipesapp.model.Recipe
 
 class FavoritesViewModel(application: Application) : AndroidViewModel(application) {
@@ -28,19 +29,20 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
 
         viewModelScope.launch {
 
-
             val favoriteIds = getFavorites().mapNotNull { it.toIntOrNull() }.toSet()
 
-            val favoriteRecipes = recipesRepository.getRecipesByIds(favoriteIds)
+            val favoriteRecipesResult = recipesRepository.getRecipesByIds(favoriteIds)
 
-                if (favoriteRecipes != null) {
+            when (favoriteRecipesResult) {
+                is ResponseResult.Success -> {
                     _favoritesState.postValue(
                         FavoritesState(
-                            favoritesList = favoriteRecipes,
+                            favoritesList = favoriteRecipesResult.data,
                             errorResId = null,
                         )
                     )
-                } else {
+                }
+                else -> {
                     _favoritesState.postValue(
                         FavoritesState(
                             favoritesList = emptyList(),
@@ -49,7 +51,10 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
                     )
                 }
             }
+
         }
+
+    }
 
     private fun getFavorites(): MutableSet<String> {
         val sharedPrefs =
@@ -59,5 +64,4 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
             )
         return HashSet(sharedPrefs.getStringSet(KEY_FAVORITE_RECIPES, emptySet()) ?: emptySet())
     }
-
 }

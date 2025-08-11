@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 import ru.eafedorova.recipesapp.Constants.IMAGE_URL
 import ru.eafedorova.recipesapp.R
 import ru.eafedorova.recipesapp.data.RecipesRepository
+import ru.eafedorova.recipesapp.data.ResponseResult
 import ru.eafedorova.recipesapp.model.Category
 import ru.eafedorova.recipesapp.model.Recipe
 
@@ -26,23 +27,25 @@ class RecipeListViewModel(application: Application) : AndroidViewModel(applicati
     val recipeListState: LiveData<RecipeListState> get() = _recipeListState
 
     fun loadRecipeList(category: Category) {
+
         viewModelScope.launch {
 
-            val recipesList = recipesRepository.getRecipesByCategoryId(category.id)
+            val recipesResult = recipesRepository.getRecipesByCategoryId(category.id)
 
             val drawable = IMAGE_URL + category.imageUrl
 
-                if (recipesList != null) {
-                    val drawable = IMAGE_URL + category.imageUrl
+            when (recipesResult) {
+                is ResponseResult.Success -> {
                     _recipeListState.postValue(
                         RecipeListState(
                             categoryName = category.title,
                             categoryImageUrl = drawable,
-                            recipesList = recipesList,
+                            recipesList = recipesResult.data,
                             errorResId = null,
                         )
                     )
-                } else {
+                }
+                else -> {
                     _recipeListState.postValue(
                         RecipeListState(
                             categoryName = category.title,
@@ -52,6 +55,10 @@ class RecipeListViewModel(application: Application) : AndroidViewModel(applicati
                         )
                     )
                 }
+            }
+
         }
+
     }
+
 }

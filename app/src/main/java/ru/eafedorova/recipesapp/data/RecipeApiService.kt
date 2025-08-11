@@ -1,6 +1,5 @@
 package ru.eafedorova.recipesapp.data
 
-import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -10,18 +9,18 @@ import ru.eafedorova.recipesapp.model.Recipe
 interface RecipeApiService {
 
     @GET("recipe/{id}")
-    fun getRecipeById(@Path("id") recipeId: Int): Call<Recipe>
+    suspend fun getRecipeById(@Path("id") recipeId: Int): Recipe
 
     @GET("recipes")
-    fun getRecipesByIds(@Query("ids") recipeIds: String): Call<List<Recipe>>
+    suspend fun getRecipesByIds(@Query("ids") recipeIds: String): List<Recipe>
 
     @GET("category/{id}")
-    fun getCategoryById(@Path("id") categoryId: Int): Call<Category>
+    suspend fun getCategoryById(@Path("id") categoryId: Int): Category
 
     @GET("category/{id}/recipes")
-    fun getRecipesByCategoryId(@Path("id") categoryId: Int): Call<List<Recipe>>
+    suspend fun getRecipesByCategoryId(@Path("id") categoryId: Int): List<Recipe>
 
     @GET("category")
-    fun getCategories(): Call<List<Category>>
+    suspend fun getCategories(): List<Category>
 
 }

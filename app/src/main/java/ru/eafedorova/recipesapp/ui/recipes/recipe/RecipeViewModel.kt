@@ -5,13 +5,15 @@ import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import ru.eafedorova.recipesapp.Constants.IMAGE_URL
 import ru.eafedorova.recipesapp.Constants.KEY_FAVORITE_RECIPES
 import ru.eafedorova.recipesapp.Constants.PREFS_FAVORITE_RECIPES
 import ru.eafedorova.recipesapp.R
 import ru.eafedorova.recipesapp.data.RecipesRepository
+import ru.eafedorova.recipesapp.data.ResponseResult
 import ru.eafedorova.recipesapp.model.Recipe
-import java.util.concurrent.Executors
 
 class RecipeViewModel(application: Application) : AndroidViewModel(application) {
     data class RecipeState(
@@ -22,8 +24,6 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         val errorResId: Int? = null,
     )
 
-    private val threadPool = Executors.newFixedThreadPool(10)
-
     private val recipesRepository = RecipesRepository()
 
     private val _recipeState = MutableLiveData(RecipeState())
@@ -31,26 +31,26 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
 
     fun loadRecipe(recipeId: Int) {
 
-        threadPool.execute {
+        viewModelScope.launch {
 
-            recipesRepository.getRecipeById(recipeId) { recipe ->
+            val recipeResult = recipesRepository.getRecipeById(recipeId)
+            val favoriteSet = getFavorites()
+            val isFavorite = favoriteSet.contains(recipeId.toString())
 
-                val favoriteSet = getFavorites()
-                val isFavorite = favoriteSet.contains(recipeId.toString())
-
-                val drawable = IMAGE_URL + recipe?.imageUrl
-
-                if (recipe != null) {
+            when (recipeResult) {
+                is ResponseResult.Success -> {
+                    val drawable = IMAGE_URL + recipeResult.data.imageUrl
                     _recipeState.postValue(
                         RecipeState(
-                            recipe = recipe,
+                            recipe = recipeResult.data,
                             isFavorite = isFavorite,
                             portionsCount = 1,
                             recipeImageUrl = drawable,
                             errorResId = null,
                         )
                     )
-                } else {
+                }
+                else -> {
                     _recipeState.postValue(
                         RecipeState(
                             recipe = null,
@@ -62,6 +62,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
                     )
                 }
             }
+
         }
 
     }

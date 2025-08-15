@@ -20,7 +20,7 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
         val errorResId: Int? = null,
     )
 
-    private val recipesRepository = RecipesRepository()
+    private val recipesRepository = RecipesRepository(application.applicationContext)
 
     private val _favoritesState = MutableLiveData(FavoritesState())
     val favoritesState: LiveData<FavoritesState> get() = _favoritesState

@@ -1,5 +1,7 @@
 package ru.eafedorova.recipesapp.data
 
+import android.content.Context
+import androidx.room.Room
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -11,7 +13,7 @@ import ru.eafedorova.recipesapp.R
 import ru.eafedorova.recipesapp.model.Category
 import ru.eafedorova.recipesapp.model.Recipe
 
-class RecipesRepository {
+class RecipesRepository(context: Context) {
 
     private val contentType = "application/json".toMediaType()
 
@@ -20,6 +22,14 @@ class RecipesRepository {
             .addConverterFactory(Json.asConverterFactory(contentType)).build()
 
     private var service: RecipeApiService = retrofit.create(RecipeApiService::class.java)
+
+    private val db = Room.databaseBuilder(
+        context.applicationContext,
+        RecipesDatabase::class.java,
+        "database-recipes"
+    ).build()
+
+    private val categoriesDao: CategoriesDao = db.categoriesDao()
 
     suspend fun getCategories(): ResponseResult<List<Category>>? {
         return withContext(Dispatchers.IO) {
@@ -54,7 +64,6 @@ class RecipesRepository {
         }
     }
 
-
     suspend fun getRecipeById(recipeId: Int): ResponseResult<Recipe>? {
         return withContext(Dispatchers.IO) {
             try {
@@ -76,6 +85,14 @@ class RecipesRepository {
                 ResponseResult.Error(R.string.network_error)
             }
         }
+    }
+
+    suspend fun getCategoriesFromCache(): List<Category> {
+        return categoriesDao.getAllCategories()
+    }
+
+    suspend fun saveCategories(categories: List<Category>) {
+        categoriesDao.addCategories(categories)
     }
 
 }

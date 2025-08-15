@@ -17,7 +17,7 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
         val errorResId: Int? = null,
     )
 
-    private val recipesRepository = RecipesRepository()
+    private val recipesRepository = RecipesRepository(application.applicationContext)
 
     private val _categoriesListState = MutableLiveData(CategoriesListState())
     val categoriesListState: LiveData<CategoriesListState> get() = _categoriesListState
@@ -26,27 +26,46 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
 
         viewModelScope.launch {
 
-            val categoriesResult = recipesRepository.getCategories()
+            val cachedCategories = recipesRepository.getCategoriesFromCache()
 
-            when (categoriesResult) {
+            if (cachedCategories.isNotEmpty()) {
+                _categoriesListState.postValue(
+                    CategoriesListState(
+                        categoriesList = cachedCategories,
+                        errorResId = null
+                    )
+                )
+            }
+
+            when (val categoriesResult = recipesRepository.getCategories()) {
                 is ResponseResult.Success -> {
                     _categoriesListState.postValue(
                         CategoriesListState(
                             categoriesList = categoriesResult.data,
-                            errorResId = null,
+                            errorResId = null
                         )
                     )
+                    recipesRepository.saveCategories(categoriesResult.data)
+                }
+                is ResponseResult.Error -> {
+                    if (cachedCategories.isNotEmpty()) {
+                        _categoriesListState.postValue(
+                            CategoriesListState(
+                                categoriesList = cachedCategories,
+                                errorResId = R.string.network_error
+                            )
+                        )
+                    }
                 }
                 else -> {
                     _categoriesListState.postValue(
                         CategoriesListState(
                             categoriesList = emptyList(),
-                            errorResId = R.string.network_error,
+                            errorResId = R.string.network_error
                         )
                     )
                 }
             }
-
         }
 
     }

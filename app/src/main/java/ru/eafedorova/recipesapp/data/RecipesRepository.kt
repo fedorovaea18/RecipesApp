@@ -31,6 +31,9 @@ class RecipesRepository(context: Context) {
 
     private val categoriesDao: CategoriesDao = db.categoriesDao()
 
+    private val recipesDao: RecipesDao = db.recipesDao()
+
+
     suspend fun getCategories(): ResponseResult<List<Category>>? {
         return withContext(Dispatchers.IO) {
             try {
@@ -93,6 +96,14 @@ class RecipesRepository(context: Context) {
 
     suspend fun saveCategories(categories: List<Category>) {
         categoriesDao.addCategories(categories)
+    }
+
+    suspend fun getRecipesFromCache(categoryId: Int): List<Recipe> {
+        return recipesDao.getRecipesByCategoryId(categoryId)
+    }
+
+    suspend fun saveRecipes(recipes: List<Recipe>) {
+        recipesDao.addRecipes(recipes)
     }
 
 }

@@ -12,6 +12,7 @@ import ru.eafedorova.recipesapp.data.RecipesRepository
 import ru.eafedorova.recipesapp.data.ResponseResult
 import ru.eafedorova.recipesapp.model.Category
 import ru.eafedorova.recipesapp.model.Recipe
+import ru.eafedorova.recipesapp.ui.categories.CategoriesListViewModel.CategoriesListState
 
 class RecipeListViewModel(application: Application) : AndroidViewModel(application) {
     data class RecipeListState(
@@ -28,13 +29,26 @@ class RecipeListViewModel(application: Application) : AndroidViewModel(applicati
 
     fun loadRecipeList(category: Category) {
 
+        val categoryId = category.id
+
+        val drawable = IMAGE_URL + category.imageUrl
+
         viewModelScope.launch {
 
-            val recipesResult = recipesRepository.getRecipesByCategoryId(category.id)
+            val cachedRecipes = recipesRepository.getRecipesFromCache(categoryId)
 
-            val drawable = IMAGE_URL + category.imageUrl
+            if (cachedRecipes.isNotEmpty()) {
+                _recipeListState.postValue(
+                    RecipeListState(
+                        categoryName = category.title,
+                        categoryImageUrl = drawable,
+                        recipesList = cachedRecipes,
+                        errorResId = null,
+                    )
+                )
+            }
 
-            when (recipesResult) {
+            when (val recipesResult = recipesRepository.getRecipesByCategoryId(categoryId)) {
                 is ResponseResult.Success -> {
                     _recipeListState.postValue(
                         RecipeListState(
@@ -42,6 +56,17 @@ class RecipeListViewModel(application: Application) : AndroidViewModel(applicati
                             categoryImageUrl = drawable,
                             recipesList = recipesResult.data,
                             errorResId = null,
+                        )
+                    )
+                    recipesRepository.saveRecipes(recipesResult.data)
+                }
+                is ResponseResult.Error -> {
+                    _recipeListState.postValue(
+                        RecipeListState(
+                            categoryName = category.title,
+                            categoryImageUrl = drawable,
+                            recipesList = cachedRecipes,
+                            errorResId = R.string.network_error,
                         )
                     )
                 }

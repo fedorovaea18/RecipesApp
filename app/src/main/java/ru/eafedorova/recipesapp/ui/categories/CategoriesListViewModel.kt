@@ -1,9 +1,8 @@
 package ru.eafedorova.recipesapp.ui.categories
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.eafedorova.recipesapp.R
@@ -11,13 +10,11 @@ import ru.eafedorova.recipesapp.data.RecipesRepository
 import ru.eafedorova.recipesapp.data.ResponseResult
 import ru.eafedorova.recipesapp.model.Category
 
-class CategoriesListViewModel(application: Application) : AndroidViewModel(application) {
+class CategoriesListViewModel(private val recipesRepository: RecipesRepository) : ViewModel() {
     data class CategoriesListState(
         val categoriesList: List<Category> = emptyList(),
         val errorResId: Int? = null,
     )
-
-    private val recipesRepository = RecipesRepository(application.applicationContext)
 
     private val _categoriesListState = MutableLiveData(CategoriesListState())
     val categoriesListState: LiveData<CategoriesListState> get() = _categoriesListState

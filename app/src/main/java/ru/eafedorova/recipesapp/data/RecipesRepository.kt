@@ -1,38 +1,15 @@
 package ru.eafedorova.recipesapp.data
 
-import android.content.Context
-import androidx.room.Room
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.json.Json
-import okhttp3.MediaType.Companion.toMediaType
-import retrofit2.Retrofit
-import ru.eafedorova.recipesapp.Constants.BASE_URL
 import ru.eafedorova.recipesapp.R
 import ru.eafedorova.recipesapp.model.Category
 import ru.eafedorova.recipesapp.model.Recipe
 
-class RecipesRepository(context: Context) {
-
-    private val contentType = "application/json".toMediaType()
-
-    private var retrofit: Retrofit =
-        Retrofit.Builder().baseUrl(BASE_URL)
-            .addConverterFactory(Json.asConverterFactory(contentType)).build()
-
-    private var service: RecipeApiService = retrofit.create(RecipeApiService::class.java)
-
-    private val db = Room.databaseBuilder(
-        context.applicationContext,
-        RecipesDatabase::class.java,
-        "database-recipes"
-    ).build()
-
-    private val categoriesDao: CategoriesDao = db.categoriesDao()
-
-    private val recipesDao: RecipesDao = db.recipesDao()
-
+class RecipesRepository(
+    private val service: RecipeApiService,
+    private val db: RecipesDatabase
+) {
 
     suspend fun getCategories(): ResponseResult<List<Category>>? {
         return withContext(Dispatchers.IO) {
@@ -71,13 +48,13 @@ class RecipesRepository(context: Context) {
         return withContext(Dispatchers.IO) {
             try {
                 val response = service.getRecipeById(recipeId)
-                val cachedRecipe = recipesDao.getRecipeById(recipeId)
+                val cachedRecipe = db.recipesDao().getRecipeById(recipeId)
                 val updatedRecipe = if (cachedRecipe != null) {
                     response.copy(isFavorite = cachedRecipe.isFavorite)
                 } else {
                     response
                 }
-                recipesDao.addRecipe(updatedRecipe)
+                db.recipesDao().addRecipe(updatedRecipe)
                 ResponseResult.Success(updatedRecipe)
             } catch (e: Exception) {
                 ResponseResult.Error(R.string.network_error)
@@ -86,27 +63,27 @@ class RecipesRepository(context: Context) {
     }
 
     suspend fun getCategoriesFromCache(): List<Category> {
-        return categoriesDao.getAllCategories()
+        return db.categoriesDao().getAllCategories()
     }
 
     suspend fun saveCategories(categories: List<Category>) {
-        categoriesDao.addCategories(categories)
+        db.categoriesDao().addCategories(categories)
     }
 
     suspend fun getRecipesFromCache(categoryId: Int): List<Recipe> {
-        return recipesDao.getRecipesByCategoryId(categoryId)
+        return db.recipesDao().getRecipesByCategoryId(categoryId)
     }
 
     suspend fun saveRecipes(recipes: List<Recipe>) {
-        recipesDao.addRecipes(recipes)
+        db.recipesDao().addRecipes(recipes)
     }
 
     suspend fun getFavoritesFromCache(): List<Recipe> {
-        return recipesDao.getFavoritesRecipes()
+        return db.recipesDao().getFavoritesRecipes()
     }
 
     suspend fun setRecipeFavorite(recipeId: Int, isFavorite: Boolean) {
-        return recipesDao.updateFavoritesStatus(recipeId, isFavorite)
+        return db.recipesDao().updateFavoritesStatus(recipeId, isFavorite)
     }
 
 }

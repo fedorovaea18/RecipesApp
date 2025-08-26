@@ -7,12 +7,12 @@ import android.view.ViewGroup
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import ru.eafedorova.recipesapp.R
+import ru.eafedorova.recipesapp.RecipeApplication
 import ru.eafedorova.recipesapp.databinding.FragmentRecipeBinding
 
 class RecipeFragment : Fragment() {
@@ -22,12 +22,19 @@ class RecipeFragment : Fragment() {
         get() = _binding
             ?: throw IllegalStateException("binding for RecipeFragment must not be null")
 
-    private val viewModel: RecipeViewModel by viewModels()
+    private lateinit var recipeViewModel: RecipeViewModel
 
     private lateinit var ingredientsAdapter: IngredientsAdapter
     private lateinit var methodAdapter: MethodAdapter
 
     private val args: RecipeFragmentArgs by navArgs()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val appContainer = (requireContext().applicationContext as RecipeApplication).appContainer
+        recipeViewModel = RecipeViewModel(appContainer.repository)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -52,7 +59,7 @@ class RecipeFragment : Fragment() {
 
     private fun initUI(recipeId: Int) {
 
-        viewModel.loadRecipe(recipeId)
+        recipeViewModel.loadRecipe(recipeId)
         initAdapters()
         setupObserver()
         setupItemDecoration()
@@ -63,7 +70,7 @@ class RecipeFragment : Fragment() {
 
     private fun setupObserver() {
 
-        viewModel.recipeState.observe(viewLifecycleOwner) { state ->
+        recipeViewModel.recipeState.observe(viewLifecycleOwner) { state ->
 
             state.recipe?.let { recipe ->
                 updateRecipeTitle(recipe.title)
@@ -134,7 +141,7 @@ class RecipeFragment : Fragment() {
     private fun setupSeekBar() {
 
         binding.sbPortionCount.setOnSeekBarChangeListener(PortionSeekBarListener { progress ->
-            viewModel.updatePortionsCount(progress)
+            recipeViewModel.updatePortionsCount(progress)
         })
     }
 
@@ -153,7 +160,7 @@ class RecipeFragment : Fragment() {
     private fun setIconHeartListener() {
         binding.ibIconHeart.setOnClickListener()
         {
-            viewModel.onFavoritesClicked()
+            recipeViewModel.onFavoritesClicked()
         }
     }
 

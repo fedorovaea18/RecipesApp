@@ -1,9 +1,8 @@
 package ru.eafedorova.recipesapp.ui.recipes.recipe
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.eafedorova.recipesapp.Constants.IMAGE_URL
@@ -12,7 +11,7 @@ import ru.eafedorova.recipesapp.data.RecipesRepository
 import ru.eafedorova.recipesapp.data.ResponseResult
 import ru.eafedorova.recipesapp.model.Recipe
 
-class RecipeViewModel(application: Application) : AndroidViewModel(application) {
+class RecipeViewModel(private val recipesRepository: RecipesRepository) : ViewModel() {
     data class RecipeState(
         val recipe: Recipe? = null,
         val isFavorite: Boolean = false,
@@ -20,8 +19,6 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         val recipeImageUrl: String? = null,
         val errorResId: Int? = null,
     )
-
-    private val recipesRepository = RecipesRepository(application.applicationContext)
 
     private val _recipeState = MutableLiveData(RecipeState())
     val recipeState: LiveData<RecipeState> get() = _recipeState

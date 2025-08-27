@@ -31,7 +31,7 @@ class RecipesListFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         val appContainer = (requireContext().applicationContext as RecipeApplication).appContainer
-        recipesListViewModel = RecipesListViewModel(appContainer.repository)
+        recipesListViewModel = appContainer.recipesListViewModel.create()
     }
 
     override fun onCreateView(

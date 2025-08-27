@@ -33,7 +33,7 @@ class RecipeFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         val appContainer = (requireContext().applicationContext as RecipeApplication).appContainer
-        recipeViewModel = RecipeViewModel(appContainer.repository)
+        recipeViewModel = appContainer.recipeViewModel.create()
     }
 
     override fun onCreateView(

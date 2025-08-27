@@ -27,7 +27,7 @@ class FavoritesFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         val appContainer = (requireContext().applicationContext as RecipeApplication).appContainer
-        favoritesViewModel = FavoritesViewModel(appContainer.repository)
+        favoritesViewModel = appContainer.favoritesViewModel.create()
     }
 
     override fun onCreateView(

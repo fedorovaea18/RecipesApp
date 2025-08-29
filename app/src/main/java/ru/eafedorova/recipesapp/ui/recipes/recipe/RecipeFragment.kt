@@ -7,14 +7,16 @@ import android.view.ViewGroup
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.divider.MaterialDividerItemDecoration
+import dagger.hilt.android.AndroidEntryPoint
 import ru.eafedorova.recipesapp.R
-import ru.eafedorova.recipesapp.RecipeApplication
 import ru.eafedorova.recipesapp.databinding.FragmentRecipeBinding
 
+@AndroidEntryPoint
 class RecipeFragment : Fragment() {
 
     private var _binding: FragmentRecipeBinding? = null
@@ -22,19 +24,12 @@ class RecipeFragment : Fragment() {
         get() = _binding
             ?: throw IllegalStateException("binding for RecipeFragment must not be null")
 
-    private lateinit var recipeViewModel: RecipeViewModel
+    private val recipeViewModel: RecipeViewModel by viewModels()
 
     private lateinit var ingredientsAdapter: IngredientsAdapter
     private lateinit var methodAdapter: MethodAdapter
 
     private val args: RecipeFragmentArgs by navArgs()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val appContainer = (requireContext().applicationContext as RecipeApplication).appContainer
-        recipeViewModel = appContainer.recipeViewModel.create()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?

@@ -4,12 +4,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.eafedorova.recipesapp.R
 import ru.eafedorova.recipesapp.data.RecipesRepository
 import ru.eafedorova.recipesapp.model.Recipe
+import javax.inject.Inject
 
-class FavoritesViewModel(private val recipesRepository: RecipesRepository) : ViewModel() {
+@HiltViewModel
+class FavoritesViewModel @Inject constructor(
+    private val recipesRepository: RecipesRepository
+) : ViewModel() {
+
     data class FavoritesState(
         val favoritesList: List<Recipe> = emptyList(),
         val errorResId: Int? = null,

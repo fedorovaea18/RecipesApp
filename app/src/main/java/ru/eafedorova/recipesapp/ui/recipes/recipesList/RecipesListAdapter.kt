@@ -10,8 +10,8 @@ import ru.eafedorova.recipesapp.R
 import ru.eafedorova.recipesapp.databinding.ItemRecipeBinding
 import ru.eafedorova.recipesapp.model.Recipe
 
-class RecipeListAdapter(private var dataSet: List<Recipe>) :
-    RecyclerView.Adapter<RecipeListAdapter.ViewHolder>() {
+class RecipesListAdapter(private var dataSet: List<Recipe>) :
+    RecyclerView.Adapter<RecipesListAdapter.ViewHolder>() {
 
     interface OnItemClickListener {
         fun onItemClick(recipeId: Int)

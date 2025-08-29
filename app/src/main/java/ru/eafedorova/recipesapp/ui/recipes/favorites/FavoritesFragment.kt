@@ -6,11 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import ru.eafedorova.recipesapp.R
+import ru.eafedorova.recipesapp.RecipeApplication
 import ru.eafedorova.recipesapp.databinding.FragmentFavoritesBinding
-import ru.eafedorova.recipesapp.ui.recipes.recipesList.RecipeListAdapter
+import ru.eafedorova.recipesapp.ui.recipes.recipesList.RecipesListAdapter
 
 class FavoritesFragment : Fragment() {
 
@@ -19,9 +19,16 @@ class FavoritesFragment : Fragment() {
         get() = _binding
             ?: throw IllegalStateException("binding for FavoritesFragment must not be null")
 
-    private val viewModel: FavoritesViewModel by viewModels()
+    private lateinit var favoritesViewModel: FavoritesViewModel
 
-    private lateinit var favoriteListAdapter: RecipeListAdapter
+    private lateinit var favoriteListAdapter: RecipesListAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val appContainer = (requireContext().applicationContext as RecipeApplication).appContainer
+        favoritesViewModel = appContainer.favoritesViewModel.create()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,17 +46,17 @@ class FavoritesFragment : Fragment() {
     }
 
     private fun initUI() {
-        viewModel.loadFavorites()
+        favoritesViewModel.loadFavorites()
         initAdapters()
         setupObserver()
     }
 
     private fun initAdapters() {
-        favoriteListAdapter = RecipeListAdapter(emptyList())
+        favoriteListAdapter = RecipesListAdapter(emptyList())
         binding.rvFavorites.adapter = favoriteListAdapter
 
         favoriteListAdapter.setOnItemClickListener(object :
-            RecipeListAdapter.OnItemClickListener {
+            RecipesListAdapter.OnItemClickListener {
             override fun onItemClick(recipeId: Int) {
                 openRecipeByRecipeId(recipeId)
             }
@@ -58,7 +65,7 @@ class FavoritesFragment : Fragment() {
 
     private fun setupObserver() {
 
-        viewModel.favoritesState.observe(viewLifecycleOwner) { state ->
+        favoritesViewModel.favoritesState.observe(viewLifecycleOwner) { state ->
             favoriteListAdapter.updateRecipes(state.favoritesList)
 
             if (state.favoritesList.isEmpty()) {

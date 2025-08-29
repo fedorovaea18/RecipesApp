@@ -6,11 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import ru.eafedorova.recipesapp.R
+import ru.eafedorova.recipesapp.RecipeApplication
 import ru.eafedorova.recipesapp.databinding.FragmentListRecipesBinding
 import ru.eafedorova.recipesapp.model.Category
 
@@ -21,11 +21,18 @@ class RecipesListFragment : Fragment() {
         get() = _binding
             ?: throw IllegalStateException("binding for RecipesListFragment must not be null")
 
-    private val viewModel: RecipeListViewModel by viewModels()
+    private lateinit var recipesListViewModel: RecipesListViewModel
 
-    private lateinit var recipeListAdapter: RecipeListAdapter
+    private lateinit var recipeListAdapter: RecipesListAdapter
 
     private val args: RecipesListFragmentArgs by navArgs()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val appContainer = (requireContext().applicationContext as RecipeApplication).appContainer
+        recipesListViewModel = appContainer.recipesListViewModel.create()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,18 +52,18 @@ class RecipesListFragment : Fragment() {
     }
 
     private fun initUI(category: Category) {
-        viewModel.loadRecipeList(category)
+        recipesListViewModel.loadRecipeList(category)
         initAdapters()
         setupObserver()
     }
 
     private fun initAdapters() {
-        recipeListAdapter = RecipeListAdapter(emptyList())
+        recipeListAdapter = RecipesListAdapter(emptyList())
         binding.rvRecipes.adapter = recipeListAdapter
 
 
         recipeListAdapter.setOnItemClickListener(object :
-            RecipeListAdapter.OnItemClickListener {
+            RecipesListAdapter.OnItemClickListener {
             override fun onItemClick(recipeId: Int) {
                 openRecipeByRecipeId(recipeId)
             }
@@ -65,7 +72,7 @@ class RecipesListFragment : Fragment() {
 
     private fun setupObserver() {
 
-        viewModel.recipeListState.observe(viewLifecycleOwner) { state ->
+        recipesListViewModel.recipeListState.observe(viewLifecycleOwner) { state ->
             binding.tvTitleCategoryRecipe.text = state.categoryName
             loadImage(state)
 
@@ -78,7 +85,7 @@ class RecipesListFragment : Fragment() {
         }
     }
 
-    private fun loadImage(state: RecipeListViewModel.RecipeListState) {
+    private fun loadImage(state: RecipesListViewModel.RecipeListState) {
         Glide
             .with(this)
             .load(state.categoryImageUrl)

@@ -1,9 +1,8 @@
 package ru.eafedorova.recipesapp.ui.recipes.recipesList
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.eafedorova.recipesapp.Constants.IMAGE_URL
@@ -12,17 +11,14 @@ import ru.eafedorova.recipesapp.data.RecipesRepository
 import ru.eafedorova.recipesapp.data.ResponseResult
 import ru.eafedorova.recipesapp.model.Category
 import ru.eafedorova.recipesapp.model.Recipe
-import ru.eafedorova.recipesapp.ui.categories.CategoriesListViewModel.CategoriesListState
 
-class RecipeListViewModel(application: Application) : AndroidViewModel(application) {
+class RecipesListViewModel(private val recipesRepository: RecipesRepository) : ViewModel() {
     data class RecipeListState(
         val categoryName: String? = null,
         val categoryImageUrl: String? = null,
         val recipesList: List<Recipe> = emptyList(),
         val errorResId: Int? = null,
     )
-
-    private val recipesRepository = RecipesRepository(application.applicationContext)
 
     private val _recipeListState = MutableLiveData(RecipeListState())
     val recipeListState: LiveData<RecipeListState> get() = _recipeListState

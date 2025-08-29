@@ -5,8 +5,9 @@ import kotlinx.coroutines.withContext
 import ru.eafedorova.recipesapp.R
 import ru.eafedorova.recipesapp.model.Category
 import ru.eafedorova.recipesapp.model.Recipe
+import javax.inject.Inject
 
-class RecipesRepository(
+class RecipesRepository @Inject constructor(
     private val service: RecipeApiService,
     private val db: RecipesDatabase
 ) {

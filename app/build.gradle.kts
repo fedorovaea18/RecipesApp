@@ -11,7 +11,7 @@ plugins {
 
 android {
     namespace = "ru.eafedorova.recipesapp"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "ru.eafedorova.recipesapp"

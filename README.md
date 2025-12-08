@@ -20,5 +20,8 @@ cd RecipesApp
 - _Async operations: Kotlin Coroutines_.
 
 
-Uploading Запись экрана от 2025-12-08 18-48-02.mp4…
+
+
+
+https://github.com/user-attachments/assets/e41af00c-bcf4-4759-b9aa-dd8ac9cede87
 

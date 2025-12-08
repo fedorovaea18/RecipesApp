@@ -2,6 +2,8 @@
 
 The client-server Android-application for viewing cooking recipes by category, viewing detailed recipe information (ingredients and cooking method) and managing a list of favorite recipes based on Figma layouts.
 
+https://github.com/user-attachments/assets/2ca6a673-cf4e-45a4-99d3-867c7f7bdee4
+
 ## **Start**
 1. Clone the repository
 ```
@@ -22,6 +24,4 @@ cd RecipesApp
 
 
 
-
-https://github.com/user-attachments/assets/e41af00c-bcf4-4759-b9aa-dd8ac9cede87
 

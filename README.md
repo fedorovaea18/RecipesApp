@@ -18,3 +18,7 @@ cd RecipesApp
 - _Networking: Retrofit_;
 - _DI: Hilt_;
 - _Async operations: Kotlin Coroutines_.
+
+
+Uploading Запись экрана от 2025-12-08 18-48-02.mp4…
+
